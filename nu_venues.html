@@ -25,12 +25,12 @@
                         display: ['Prata', 'serif'],
                     },
                     animation: {
-                        'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                         'fade-out': 'fadeOut 0.3s ease-in forwards',
                     },
                     keyframes: {
                         fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
                         },
                         fadeOut: {
@@ -44,261 +44,267 @@
     </script>
     <style>
         body {
-            background-color: #f8fafc;
-            color: #1e293b;
-            background-image: 
-                radial-gradient(circle at 5% 5%, rgba(197, 179, 88, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 95% 95%, rgba(0, 51, 102, 0.05) 0%, transparent 40%);
+            background-color: #1a1a1a; 
+            color: #1d1d1f;
             min-height: 100vh;
-            scroll-behavior: smooth;
+            overflow-x: hidden;
         }
-        
-        .glass-card {
+
+        /* APPLE-STYLE GLASSMORPHISM */
+        .apple-glass {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .apple-glass:hover {
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Nav specific glass */
+        .nav-glass {
             background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
         }
 
-        .glass-card:hover {
-            transform: translateY(-8px) scale(1.01);
-            border-color: rgba(197, 179, 88, 0.3);
-            box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.08), 0 15px 15px -5px rgba(0, 0, 0, 0.04);
-        }
-
-        /* Parallax Background Helper */
-        .parallax-bg {
-            background-attachment: fixed;
-            background-position: center;
-            background-repeat: no-repeat;
+        /* Modern Gradient Background */
+        #bg-container {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            /* Modern deep gradient */
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
             background-size: cover;
         }
 
         /* Card Animation Classes */
         .card-enter {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform: translateY(30px) scale(0.98);
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
         
         .card-enter-active {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #C5B358;
-        }
-
-        /* Gallery Scrollbar - Hidden to prefer buttons, but functional */
-        #modalGallery {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-        #modalGallery::-webkit-scrollbar {
+        /* Hide Scrollbar for filters but allow scroll */
+        .hide-scrollbar::-webkit-scrollbar {
             display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Custom Scrollbar for Modal content */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2);
+            border-radius: 3px;
         }
     </style>
 </head>
-<body class="antialiased overflow-x-hidden">
+<body class="antialiased text-gray-800">
+
+    <!-- GLOBAL BACKGROUND -->
+    <div id="bg-container"></div>
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 glass-card border-b border-gray-100 top-0 bg-white/90 transition-all duration-300" id="navbar">
+    <nav class="fixed w-full z-50 nav-glass top-0 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <div class="flex items-center space-x-3 group cursor-pointer" onclick="window.scrollTo(0,0)">
                     <!-- Logo -->
-                    <img src="NU_Logo_ENG-01.png" alt="Nazarbayev University" class="h-12 w-auto object-contain transition-transform duration-500 group-hover:rotate-1">
-                    <span class="font-sans font-light text-sm text-nu-gold ml-2 uppercase tracking-widest border-l border-gray-300 pl-2 hidden sm:block">Venues</span>
+                    <img src="NU_Logo_ENG-01.png" alt="Nazarbayev University" class="h-10 sm:h-12 w-auto object-contain transition-transform duration-500 group-hover:scale-105">
+                    <span class="font-sans font-light text-sm text-nu-gold ml-2 uppercase tracking-widest border-l border-gray-400 pl-2 hidden sm:block">Venues</span>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <div class="relative group">
-                            <button id="viewOptionsBtn" class="bg-white border border-gray-200 text-gray-600 hover:text-nu-blue hover:border-nu-blue px-4 py-2 rounded-full transition duration-300 text-sm font-bold flex items-center gap-2 shadow-sm hover:shadow-md">
-                                <i class="fas fa-layer-group"></i> View Options
+                            <button id="viewOptionsBtn" class="bg-white/50 border border-white/50 hover:bg-white text-gray-700 hover:text-nu-blue px-4 py-2 rounded-full transition duration-300 text-sm font-medium flex items-center gap-2 shadow-sm backdrop-blur-md">
+                                <i class="fas fa-layer-group text-nu-gold"></i> View Options
                             </button>
                             <!-- Dropdown -->
-                            <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-right scale-95 group-hover:scale-100 z-50">
+                            <div class="absolute right-0 mt-2 w-48 apple-glass rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-right scale-95 group-hover:scale-100 z-50 overflow-hidden">
                                 <div class="p-1">
-                                    <button onclick="setViewMode('grid')" class="flex items-center w-full px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
-                                        <i class="fas fa-th-large w-6 mr-2"></i> Grid View
+                                    <button onclick="setViewMode('grid')" class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-white/60 rounded-xl transition-colors">
+                                        <i class="fas fa-th-large w-5 mr-3 text-nu-blue"></i> Grid View
                                     </button>
-                                    <button onclick="setViewMode('list')" class="flex items-center w-full px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
-                                        <i class="fas fa-list w-6 mr-2"></i> List View
+                                    <button onclick="setViewMode('list')" class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-white/60 rounded-xl transition-colors">
+                                        <i class="fas fa-list w-5 mr-3 text-nu-blue"></i> List View
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- Mobile View Options Toggle -->
+                 <div class="md:hidden flex items-center gap-2">
+                    <button onclick="toggleViewModeMobile()" class="bg-white/50 p-2 rounded-full backdrop-blur-md shadow-sm border border-white/40 text-nu-blue">
+                        <i id="mobileViewIcon" class="fas fa-th-large"></i>
+                    </button>
+                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section with Parallax -->
-    <div class="relative pt-32 pb-20 sm:pt-40 sm:pb-24 overflow-hidden min-h-[60vh] flex items-center justify-center">
-        <!-- Parallax Background Element -->
-        <div id="hero-bg" class="absolute inset-0 z-0 bg-gradient-to-br from-gray-50 to-gray-100 opacity-50 transform transition-transform duration-75 will-change-transform">
-            <!-- Decorative abstract shapes -->
-            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-nu-blue/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-            <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-nu-gold/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4"></div>
-        </div>
-
+    <!-- Hero Section -->
+    <div class="relative pt-32 pb-16 sm:pt-48 sm:pb-32 overflow-hidden min-h-[50vh] sm:min-h-[60vh] flex items-center justify-center">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center" id="hero-content">
-            <h1 class="text-5xl md:text-7xl font-display text-nu-blue mb-6 tracking-tight opacity-0 translate-y-10 animate-fade-in-up" style="animation-delay: 0.1s;">
+            <h1 class="text-5xl sm:text-6xl md:text-8xl font-display text-white mb-4 sm:mb-6 tracking-tight opacity-0 translate-y-10 animate-fade-in-up drop-shadow-lg" style="animation-delay: 0.1s;">
                 World-Class Venues
             </h1>
-            <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto font-light leading-relaxed opacity-0 translate-y-10 animate-fade-in-up" style="animation-delay: 0.3s;">
-                Host your next conference, performance, or summit at Nazarbayev University. 
-                Experience state-of-the-art facilities with flexible rental options.
+            <p class="mt-4 sm:mt-6 text-lg sm:text-xl md:text-2xl text-gray-200 max-w-2xl mx-auto font-light leading-relaxed opacity-0 translate-y-10 animate-fade-in-up drop-shadow-md px-4" style="animation-delay: 0.3s;">
+                Host your next conference, performance, or summit at <span class="font-medium text-nu-gold">Nazarbayev University</span>. 
             </p>
-            <div class="mt-10 flex justify-center gap-4 opacity-0 translate-y-10 animate-fade-in-up" style="animation-delay: 0.5s;">
-                <a href="#halls" class="bg-nu-blue text-white px-8 py-4 rounded-full font-semibold hover:bg-blue-900 transition duration-300 flex items-center gap-2 group font-display tracking-wide shadow-lg shadow-blue-900/10 hover:shadow-blue-900/20 hover:-translate-y-1">
-                    Find a Hall <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+            <div class="mt-8 sm:mt-10 flex justify-center gap-4 opacity-0 translate-y-10 animate-fade-in-up" style="animation-delay: 0.5s;">
+                <a href="#halls" class="bg-white/10 backdrop-blur-md border border-white/20 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full font-medium hover:bg-white/20 transition duration-300 flex items-center gap-2 group font-sans tracking-wide shadow-lg hover:-translate-y-1 text-sm sm:text-base">
+                    Explore Spaces <i class="fas fa-arrow-down group-hover:translate-y-1 transition-transform"></i>
                 </a>
             </div>
         </div>
     </div>
 
     <!-- Interface Section -->
-    <div id="halls" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div id="halls" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         
         <!-- Filters -->
-        <div class="sticky top-24 z-30 transition-all duration-300" id="filter-bar">
-             <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6 bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-gray-100 shadow-lg shadow-gray-200/50">
+        <div class="sticky top-20 sm:top-24 z-30 transition-all duration-300 pb-6 sm:pb-8" id="filter-bar">
+             <div class="apple-glass p-4 sm:p-6 rounded-3xl flex flex-col md:flex-row items-center gap-6">
             
                 <!-- Capacity Slider -->
-                <div class="w-full md:w-1/3">
-                    <label class="block text-sm font-medium text-gray-700 mb-2 font-display">
-                        <i class="fas fa-users mr-2 text-nu-gold"></i>Minimum Capacity: <span id="capacityValue" class="text-nu-blue font-bold">0</span>
+                <div class="w-full md:w-1/3 flex-shrink-0">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2 font-sans flex items-center justify-between">
+                        <span><i class="fas fa-users mr-2 text-nu-gold"></i>Minimum Capacity</span>
+                        <span id="capacityValue" class="text-nu-blue font-bold bg-white/50 px-2 py-1 rounded-lg shadow-sm">0</span>
                     </label>
                     <input type="range" id="capacityRange" min="0" max="750" value="0" step="10" 
-                        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-nu-blue hover:bg-gray-300 transition-colors">
-                    <div class="flex justify-between text-xs text-gray-400 mt-1">
-                        <span>0</span>
-                        <span>750+</span>
-                    </div>
+                        class="w-full h-1.5 bg-gray-300/50 rounded-lg appearance-none cursor-pointer accent-nu-blue hover:accent-nu-gold transition-colors">
                 </div>
 
-                <!-- Category Buttons -->
-                <div class="flex flex-wrap gap-2 w-full md:w-auto" id="filterButtons">
-                    <button class="filter-btn active bg-nu-gold text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 font-display shadow-md transform hover:scale-105" data-category="all">All</button>
-                    <button class="filter-btn bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 font-display hover:scale-105" data-category="Hall">Halls</button>
-                    <button class="filter-btn bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 font-display hover:scale-105" data-category="Classroom">Classrooms</button>
-                    <button class="filter-btn bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 font-display hover:scale-105" data-category="Space">Spaces</button>
-                    <button class="filter-btn bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 font-display hover:scale-105" data-category="Sports">Sports</button>
+                <!-- Category Buttons (Scrollable horizontally) -->
+                <div class="w-full flex-grow overflow-x-auto hide-scrollbar">
+                    <div class="flex flex-nowrap items-center gap-2" id="filterButtons">
+                        <button class="filter-btn active bg-nu-blue text-white px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 shadow-lg shadow-blue-900/20 transform scale-105 whitespace-nowrap flex-shrink-0" data-category="all">All</button>
+                        <button class="filter-btn bg-white/40 hover:bg-white text-gray-600 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-md border border-white/20 whitespace-nowrap flex-shrink-0" data-category="Hall">Halls</button>
+                        <button class="filter-btn bg-white/40 hover:bg-white text-gray-600 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-md border border-white/20 whitespace-nowrap flex-shrink-0" data-category="Classroom">Classrooms</button>
+                        <button class="filter-btn bg-white/40 hover:bg-white text-gray-600 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-md border border-white/20 whitespace-nowrap flex-shrink-0" data-category="Space">Spaces</button>
+                        <button class="filter-btn bg-white/40 hover:bg-white text-gray-600 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-md border border-white/20 whitespace-nowrap flex-shrink-0" data-category="Sports">Sports</button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Grid Container -->
-        <div id="hallsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-500 min-h-[400px]">
+        <div id="hallsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 transition-all duration-500 min-h-[400px]">
             <!-- Cards will be injected here by JS -->
         </div>
         
         <!-- Empty State -->
         <div id="emptyState" class="hidden text-center py-20 opacity-0 transition-opacity duration-500">
-            <i class="fas fa-search text-5xl text-gray-200 mb-4 animate-bounce"></i>
-            <h3 class="text-xl text-gray-400 font-display">No venues match your criteria.</h3>
+            <div class="apple-glass inline-block p-8 rounded-full mb-4">
+                <i class="fas fa-search text-4xl text-nu-gold animate-pulse"></i>
+            </div>
+            <h3 class="text-xl text-white font-display">No venues match your criteria.</h3>
         </div>
 
     </div>
 
     <!-- Booking Modal (Detail View) -->
     <div id="modalOverlay" class="fixed inset-0 bg-gray-900/60 backdrop-blur-md z-[60] hidden flex items-center justify-center p-4 opacity-0 transition-all duration-500">
-        <div id="modalContent" class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden transform scale-90 transition-all duration-500 flex flex-col md:flex-row max-h-[90vh]">
+        <!-- Using h-auto and max-h-[90vh] to allow fitting to image height -->
+        <div id="modalContent" class="apple-glass w-full max-w-5xl rounded-[2rem] shadow-2xl overflow-hidden transform scale-95 transition-all duration-500 flex flex-col md:flex-row h-auto max-h-[90vh] border-0 ring-1 ring-white/50">
             
-            <!-- Image Gallery Side -->
-            <div class="w-full md:w-1/2 relative bg-gray-100 group flex flex-col justify-center overflow-hidden">
+            <!-- Image Gallery Side (Enforced 3:2 Aspect Ratio) -->
+            <div class="w-full md:w-[60%] aspect-[3/2] relative bg-gray-100/50 group flex flex-col justify-center overflow-hidden flex-shrink-0">
                 <!-- Gallery Container -->
-                <div id="modalGallery" class="flex overflow-x-auto snap-x snap-mandatory h-64 md:h-full scroll-smooth w-full relative z-0">
+                <div id="modalGallery" class="flex overflow-x-auto snap-x snap-mandatory h-full scroll-smooth w-full relative z-0">
                     <!-- Images injected here -->
                 </div>
                 
                 <!-- Category Badge -->
-                <div class="absolute top-4 left-4 z-10">
-                    <span id="modalCategory" class="px-4 py-1.5 bg-white/90 backdrop-blur text-nu-blue text-xs font-bold rounded-full uppercase tracking-wide font-display shadow-lg border border-white/50"></span>
-                </div>
-
-                <!-- Multiple Photos Badge -->
-                <div class="absolute top-4 right-4 z-10">
-                    <span class="px-3 py-1.5 bg-black/40 backdrop-blur-md text-white text-[10px] font-bold rounded-full uppercase tracking-wide flex items-center gap-2 border border-white/10">
-                        <i class="fas fa-images"></i> Gallery
-                    </span>
+                <div class="absolute top-4 left-4 sm:top-6 sm:left-6 z-10">
+                    <span id="modalCategory" class="px-3 py-1.5 sm:px-4 sm:py-2 bg-white/80 backdrop-blur-md text-nu-blue text-[10px] sm:text-xs font-bold rounded-full uppercase tracking-wide font-display shadow-lg border border-white/40"></span>
                 </div>
                 
                 <!-- Navigation Buttons -->
-                <button onclick="scrollGallery(-1)" id="prevBtn" class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 backdrop-blur hover:bg-white text-white hover:text-nu-blue shadow-lg flex items-center justify-center z-20 transition-all duration-300 opacity-0 translate-x-4 group-hover:translate-x-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto">
+                <button onclick="scrollGallery(-1)" id="prevBtn" class="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/10 backdrop-blur-md hover:bg-white text-white hover:text-nu-blue border border-white/20 shadow-lg flex items-center justify-center z-20 transition-all duration-300 opacity-0 translate-x-4 group-hover:translate-x-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto">
                     <i class="fas fa-chevron-left"></i>
                 </button>
-                <button onclick="scrollGallery(1)" id="nextBtn" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 backdrop-blur hover:bg-white text-white hover:text-nu-blue shadow-lg flex items-center justify-center z-20 transition-all duration-300 opacity-0 -translate-x-4 group-hover:translate-x-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto">
+                <button onclick="scrollGallery(1)" id="nextBtn" class="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/10 backdrop-blur-md hover:bg-white text-white hover:text-nu-blue border border-white/20 shadow-lg flex items-center justify-center z-20 transition-all duration-300 opacity-0 -translate-x-4 group-hover:translate-x-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto">
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
 
             <!-- Info Side -->
-            <div class="w-full md:w-1/2 p-8 md:p-10 flex flex-col overflow-y-auto custom-scrollbar bg-white">
-                <div class="flex justify-between items-start mb-6">
-                    <h2 id="modalTitle" class="text-3xl md:text-4xl font-display text-nu-blue leading-tight"></h2>
-                    <button onclick="closeModal()" class="w-10 h-10 rounded-full bg-gray-50 hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-nu-dark transition-all duration-300 transform hover:rotate-90">
-                        <i class="fas fa-times text-lg"></i>
+            <div class="w-full md:w-[40%] p-6 sm:p-8 md:p-10 flex flex-col overflow-y-auto custom-scrollbar bg-white/60 backdrop-blur-xl">
+                <div class="flex justify-between items-start mb-4 sm:mb-6">
+                    <h2 id="modalTitle" class="text-2xl sm:text-3xl md:text-4xl font-display text-nu-blue leading-tight drop-shadow-sm pr-4"></h2>
+                    <button onclick="closeModal()" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/5 hover:bg-black/10 flex items-center justify-center text-gray-500 hover:text-nu-dark transition-all duration-300 transform hover:rotate-90 flex-shrink-0">
+                        <i class="fas fa-times text-base sm:text-lg"></i>
                     </button>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-4 mb-8 text-sm border-b border-gray-100 pb-6">
-                    <div class="flex items-center text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg">
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-8 text-xs sm:text-sm border-b border-gray-200/50 pb-4 sm:pb-6">
+                    <div class="flex items-center text-gray-700 bg-white/60 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-white/50 shadow-sm">
                         <i class="fas fa-users text-nu-gold mr-2"></i>
                         <span id="modalCapacity" class="font-medium"></span>
                     </div>
-                    <div class="flex items-center text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg">
+                    <div class="flex items-center text-gray-700 bg-white/60 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-white/50 shadow-sm">
                         <i class="fas fa-ruler-combined text-nu-gold mr-2"></i>
                         <span id="modalSize" class="font-medium"></span>
                     </div>
                 </div>
                 
-                <div class="mb-6">
-                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Location</h4>
-                    <p id="modalLocation" class="text-nu-blue font-semibold font-display text-lg"></p>
+                <div class="mb-4 sm:mb-6">
+                    <h4 class="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 sm:mb-2">Location</h4>
+                    <p id="modalLocation" class="text-nu-blue font-semibold font-display text-base sm:text-lg"></p>
                 </div>
 
-                <div class="mb-8">
-                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Details</h4>
-                    <p id="modalDescription" class="text-gray-600 leading-relaxed font-light"></p>
+                <div class="mb-6 sm:mb-8">
+                    <h4 class="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 sm:mb-2">Details</h4>
+                    <p id="modalDescription" class="text-gray-700 leading-relaxed font-light text-sm sm:text-base"></p>
                 </div>
 
                 <!-- Pricing Box -->
-                <div class="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-100 relative overflow-hidden group">
-                     <div class="absolute top-0 right-0 w-24 h-24 bg-nu-gold/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150 duration-700"></div>
-                    <h4 class="text-nu-gold text-xs font-bold uppercase tracking-widest mb-4 font-display relative z-10">Rental Pricing <span class="text-gray-400 font-sans text-[10px] normal-case ml-1">(inc. VAT)</span></h4>
+                <div class="bg-gradient-to-br from-white/60 to-white/30 rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 border border-white/60 shadow-inner relative overflow-hidden group mt-auto">
+                     <div class="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-nu-gold/10 rounded-full blur-2xl -mr-8 -mt-8 sm:-mr-10 sm:-mt-10"></div>
+                    <h4 class="text-nu-gold text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-3 sm:mb-4 font-display relative z-10">Rental Pricing <span class="text-gray-400 font-sans text-[8px] sm:text-[10px] normal-case ml-1">(inc. VAT)</span></h4>
                     
-                    <div class="space-y-3 relative z-10">
-                        <div class="flex justify-between items-center pb-3 border-b border-gray-200 border-dashed">
-                            <span class="text-gray-500 text-sm">Half Day (4h)</span>
-                            <span id="modalPrice4h" class="text-nu-blue font-bold font-display text-lg"></span>
+                    <div class="space-y-2 sm:space-y-3 relative z-10">
+                        <div class="flex justify-between items-center pb-2 sm:pb-3 border-b border-gray-400/20 border-dashed">
+                            <span class="text-gray-600 text-xs sm:text-sm">Half Day (4h)</span>
+                            <span id="modalPrice4h" class="text-nu-blue font-bold font-display text-base sm:text-lg"></span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-gray-500 text-sm">Full Day (8h)</span>
-                            <span id="modalPrice8h" class="text-nu-blue font-bold font-display text-lg"></span>
+                            <span class="text-gray-600 text-xs sm:text-sm">Full Day (8h)</span>
+                            <span id="modalPrice8h" class="text-nu-blue font-bold font-display text-base sm:text-lg"></span>
                         </div>
                     </div>
                 </div>
 
-                <div class="mt-auto">
-                    <button onclick="openContactModal()" class="w-full bg-nu-blue hover:bg-blue-900 text-white font-bold py-4 rounded-xl transition-all duration-300 shadow-xl shadow-blue-900/10 hover:shadow-blue-900/20 hover:-translate-y-1 font-display tracking-wider flex justify-center items-center gap-2 group">
+                <!-- Request Booking Button -->
+                <div class="mt-4">
+                    <button onclick="openContactModal()" class="w-full bg-nu-blue hover:bg-nu-blue/90 text-white font-bold py-3 sm:py-4 rounded-2xl transition-all duration-300 shadow-xl shadow-blue-900/10 hover:shadow-blue-900/20 hover:-translate-y-1 font-display tracking-wider flex justify-center items-center gap-2 group backdrop-blur-sm text-sm sm:text-base">
                         Request Booking <i class="fas fa-paper-plane text-xs opacity-50 group-hover:translate-x-1 group-hover:opacity-100 transition-all"></i>
                     </button>
                 </div>
@@ -307,58 +313,58 @@
     </div>
 
     <!-- Contact Modal -->
-    <div id="contactModalOverlay" class="fixed inset-0 bg-gray-900/70 backdrop-blur-md z-[70] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-        <div class="bg-white p-10 rounded-3xl max-w-md w-full shadow-2xl text-center transform scale-95 transition-transform duration-300 relative overflow-hidden">
+    <div id="contactModalOverlay" class="fixed inset-0 bg-gray-900/40 backdrop-blur-lg z-[70] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="apple-glass p-6 sm:p-10 rounded-[2rem] max-w-md w-full shadow-2xl text-center transform scale-95 transition-transform duration-300 relative overflow-hidden ring-1 ring-white/60">
              <!-- Decorative background blobs -->
-             <div class="absolute -top-10 -left-10 w-32 h-32 bg-nu-gold/10 rounded-full blur-2xl"></div>
-             <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-nu-blue/10 rounded-full blur-2xl"></div>
+             <div class="absolute -top-10 -left-10 w-40 h-40 bg-nu-gold/20 rounded-full blur-3xl"></div>
+             <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-nu-blue/20 rounded-full blur-3xl"></div>
 
             <div class="relative z-10">
-                <div class="w-20 h-20 bg-gradient-to-br from-nu-gold/10 to-nu-gold/30 rounded-full flex items-center justify-center mx-auto mb-6 text-nu-gold text-3xl shadow-inner">
+                <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-white to-white/50 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 text-nu-gold text-2xl sm:text-3xl shadow-lg border border-white/50">
                     <i class="fas fa-envelope-open-text"></i>
                 </div>
-                <h3 class="text-3xl font-display text-nu-blue mb-3">Contact Us</h3>
-                <p class="text-gray-500 mb-8 font-light leading-relaxed">Ready to host your event? <br>Reach out to our management team.</p>
+                <h3 class="text-2xl sm:text-3xl font-display text-nu-blue mb-2 sm:mb-3 drop-shadow-sm">Contact Us</h3>
+                <p class="text-gray-600 mb-6 sm:mb-8 font-light leading-relaxed text-sm sm:text-base">Ready to host your event? <br>Reach out to our management team.</p>
                 
-                <div class="bg-gray-50 p-6 rounded-2xl mb-8 text-left border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                    <a href="tel:87172706191" class="text-gray-700 mb-4 flex items-center group hover:text-nu-blue transition-colors">
-                        <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center mr-4 shadow-sm group-hover:text-nu-gold transition-colors text-gray-400">
+                <div class="bg-white/50 p-4 sm:p-6 rounded-2xl mb-6 sm:mb-8 text-left border border-white/60 shadow-inner hover:shadow-md transition-shadow">
+                    <a href="tel:87172706191" class="text-gray-800 mb-3 sm:mb-4 flex items-center group hover:text-nu-blue transition-colors">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white flex items-center justify-center mr-3 sm:mr-4 shadow-sm group-hover:text-nu-gold transition-colors text-gray-400 text-sm sm:text-base">
                             <i class="fas fa-phone"></i>
                         </div>
-                        <span class="font-semibold text-lg">8 (7172) 70 61 91</span>
+                        <span class="font-semibold text-base sm:text-lg">8 (7172) 70 61 91</span>
                     </a>
-                    <a href="mailto:events@nu.edu.kz" class="text-gray-700 flex items-center group hover:text-nu-blue transition-colors">
-                        <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center mr-4 shadow-sm group-hover:text-nu-gold transition-colors text-gray-400">
+                    <a href="mailto:events@nu.edu.kz" class="text-gray-800 flex items-center group hover:text-nu-blue transition-colors">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white flex items-center justify-center mr-3 sm:mr-4 shadow-sm group-hover:text-nu-gold transition-colors text-gray-400 text-sm sm:text-base">
                             <i class="fas fa-at"></i>
                         </div>
-                        <span class="font-medium">events@nu.edu.kz</span>
+                        <span class="font-medium text-sm sm:text-base">events@nu.edu.kz</span>
                     </a>
                 </div>
 
-                <button onclick="closeContactModal()" class="text-gray-400 hover:text-gray-800 text-sm font-medium transition-colors hover:underline">Cancel</button>
+                <button onclick="closeContactModal()" class="text-gray-500 hover:text-gray-800 text-sm font-medium transition-colors hover:underline">Cancel</button>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="border-t border-gray-200 bg-white mt-20 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-center md:text-left">
+    <footer class="apple-glass mt-20 relative z-10 border-t border-white/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 text-center md:text-left">
                 <div>
-                    <span class="font-display font-bold text-2xl tracking-wider text-nu-blue">NU <span class="text-nu-gold">VENUES</span></span>
-                    <p class="mt-6 text-gray-500 text-sm leading-relaxed max-w-sm mx-auto md:mx-0">
+                    <span class="font-display font-bold text-xl sm:text-2xl tracking-wider text-nu-blue">NU <span class="text-nu-gold">VENUES</span></span>
+                    <p class="mt-4 sm:mt-6 text-gray-600 text-xs sm:text-sm leading-relaxed max-w-sm mx-auto md:mx-0">
                         The premier destination for academic conferences, cultural performances, and corporate events in Astana.
                     </p>
                 </div>
                 <div class="flex flex-col md:items-end justify-center space-y-2">
-                    <h4 class="text-nu-blue font-bold mb-2 font-display uppercase tracking-widest text-sm">Contact Information</h4>
-                    <p class="text-sm text-gray-500 hover:text-nu-blue transition-colors cursor-pointer"><i class="fas fa-map-pin mr-2 text-nu-gold"></i> 53 Kabanbay Batyr Ave, Astana</p>
-                    <p class="text-sm text-gray-500 hover:text-nu-blue transition-colors cursor-pointer"><i class="fas fa-envelope mr-2 text-nu-gold"></i> events@nu.edu.kz</p>
+                    <h4 class="text-nu-blue font-bold mb-2 font-display uppercase tracking-widest text-xs sm:text-sm">Contact Information</h4>
+                    <p class="text-xs sm:text-sm text-gray-600 hover:text-nu-blue transition-colors cursor-pointer"><i class="fas fa-map-pin mr-2 text-nu-gold"></i> 53 Kabanbay Batyr Ave, Astana</p>
+                    <p class="text-xs sm:text-sm text-gray-600 hover:text-nu-blue transition-colors cursor-pointer"><i class="fas fa-envelope mr-2 text-nu-gold"></i> events@nu.edu.kz</p>
                 </div>
             </div>
-            <div class="mt-16 pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center text-xs text-gray-400">
+            <div class="mt-12 sm:mt-16 pt-8 border-t border-gray-300/30 flex flex-col md:flex-row justify-between items-center text-[10px] sm:text-xs text-gray-500 gap-4">
                 <p>&copy; 2025 Nazarbayev University. All rights reserved.</p>
-                <div class="flex gap-4 mt-4 md:mt-0">
+                <div class="flex gap-4">
                     <a href="#" class="hover:text-nu-blue transition-colors">Privacy</a>
                     <a href="#" class="hover:text-nu-blue transition-colors">Terms</a>
                 </div>
@@ -367,302 +373,32 @@
     </footer>
 
     <script>
-        // Updated Data Source
+        // Data Source
         const halls = [
-            {
-                id: 1,
-                name: "Main Hall",
-                category: "Hall",
-                capacity: 720,
-                size: "1319.00 m²",
-                location: "Block C2",
-                description: "IT support is included.",
-                images: [
-                    "main_hall_1.png",
-                    "main_hall_2.png",
-                    "main_hall_3.png"
-                ],
-                price4h: "3 000 000 ₸",
-                price8h: "5 800 000 ₸"
-            },
-            {
-                id: 2,
-                name: "Orange Hall",
-                category: "Hall",
-                capacity: 450,
-                size: "585.13 m²",
-                location: "Block C2",
-                description: "IT support is included.",
-                images: [
-                    "orange_hall_1.png",
-                    "orange_hall_2.png",
-                    "orange_hall_3.png"
-                ],
-                price4h: "1 200 000 ₸",
-                price8h: "2 400 000 ₸"
-            },
-            {
-                id: 3,
-                name: "Cinema Hall",
-                category: "Hall",
-                capacity: 371,
-                size: "536.80 m²",
-                location: "Block D-7",
-                description: "IT support is included.",
-                images: [
-                    "cinema_hall_1.png",
-                    "cinema_hall_2.png",
-                    "cinema_hall_3.png"
-                ],
-                price4h: "1 400 000 ₸",
-                price8h: "2 700 000 ₸"
-            },
-            {
-                id: 4,
-                name: "NUSOM Hall",
-                category: "Hall",
-                capacity: 320,
-                size: "416.50 m²",
-                location: "NUSOM",
-                description: "IT support is included.",
-                images: [
-                    "nusom_hall_1.png",
-                    "nusom_hall_2.png",
-                    "nusom_hall_3.png"
-                ],
-                price4h: "900 000 ₸",
-                price8h: "1 700 000 ₸"
-            },
-            {
-                id: 5,
-                name: "Senate Hall",
-                category: "Hall",
-                capacity: 260,
-                size: "754.60 m²",
-                location: "Block 1",
-                description: "IT support is included.",
-                images: [
-                    "senate_hall_1.png",
-                    "senate_hall_2.png",
-                    "senate_hall_3.png"
-                ],
-                price4h: "1 200 000 ₸",
-                price8h: "2 200 000 ₸"
-            },
-            {
-                id: 6,
-                name: "Ballroom (Left)",
-                category: "Hall",
-                capacity: 480,
-                size: "557.77 m²",
-                location: "Block C2",
-                description: "IT support is included.",
-                images: [
-                    "ballroom_left_1.png",
-                    "ballroom_left_2.png",
-                    "ballroom_left_3.png"
-                ],
-                price4h: "1 100 000 ₸",
-                price8h: "2 000 000 ₸"
-            },
-            {
-                id: 7,
-                name: "Ballroom (Right)",
-                category: "Hall",
-                capacity: 480,
-                size: "551.77 m²",
-                location: "Block C2",
-                description: "IT support is included.",
-                images: [
-                    "ballroom_right_1.png",
-                    "ballroom_right_2.png",
-                    "ballroom_right_3.png"
-                ],
-                price4h: "1 100 000 ₸",
-                price8h: "2 000 000 ₸"
-            },
-            {
-                id: 8,
-                name: "Red Hall",
-                category: "Hall",
-                capacity: 240,
-                size: "270.58 m²",
-                location: "Block C3",
-                description: "IT support is included.",
-                images: [
-                    "red_hall_1.png",
-                    "red_hall_2.png",
-                    "red_hall_3.png"
-                ],
-                price4h: "700 000 ₸",
-                price8h: "1 200 000 ₸"
-            },
-            {
-                id: 9,
-                name: "Blue Hall",
-                category: "Hall",
-                capacity: 239,
-                size: "282.55 m²",
-                location: "Block C2",
-                description: "IT support is included.",
-                images: [
-                    "blue_hall_1.png",
-                    "blue_hall_2.png",
-                    "blue_hall_3.png"
-                ],
-                price4h: "700 000 ₸",
-                price8h: "1 400 000 ₸"
-            },
-            {
-                id: 10,
-                name: "Green Hall",
-                category: "Hall",
-                capacity: 231,
-                size: "277.53 m²",
-                location: "Block C2",
-                description: "IT support is included.",
-                images: [
-                    "green_hall_1.png",
-                    "green_hall_2.png",
-                    "green_hall_3.png"
-                ],
-                price4h: "700 000 ₸",
-                price8h: "1 300 000 ₸"
-            },
-            {
-                id: 11,
-                name: "Room 1010",
-                category: "Classroom",
-                capacity: 80,
-                size: "169.54 m²",
-                location: "Block C3",
-                description: "IT support is included.",
-                images: [
-                    "1010_1.png",
-                    "1010_2.png",
-                    "1010_3.png"
-                ],
-                price4h: "300 000 ₸",
-                price8h: "600 000 ₸"
-            },
-            {
-                id: 12,
-                name: "Room 2001",
-                category: "Classroom",
-                capacity: 60,
-                size: "133.00 m²",
-                location: "Block C3",
-                description: "IT support is included.",
-                images: [
-                    "2001_1.png",
-                    "2001_2.png",
-                    "2001_3.png"
-                ],
-                price4h: "300 000 ₸",
-                price8h: "500 000 ₸"
-            },
-            {
-                id: 13,
-                name: "Upper Atrium",
-                category: "Space",
-                capacity: 0,
-                size: "2113.20 m²",
-                location: "Block C2",
-                description: "IT support is included.",
-                images: [
-                    "upper_atrium_1.png",
-                    "upper_atrium_2.png",
-                    "upper_atrium_3.png"
-                ],
-                price4h: "1 300 000 ₸",
-                price8h: "2 500 000 ₸"
-            },
-            {
-                id: 14,
-                name: "Swimming Pool (3 Lanes)",
-                category: "Sports",
-                capacity: 0,
-                size: "N/A",
-                location: "Athletic Center",
-                description: "Professional grade swimming pool lanes for training or events.",
-                images: [
-                    "swimming_pool_3lanes_1.png",
-                    "swimming_pool_3lanes_2.png",
-                    "swimming_pool_3lanes_3.png"
-                ],
-                price4h: "900 000 ₸",
-                price8h: "1 800 000 ₸"
-            },
-            {
-                id: 15,
-                name: "Swimming Pool",
-                category: "Sports",
-                capacity: 0,
-                size: "N/A",
-                location: "Athletic Center",
-                description: "Full Olympic-size swimming pool facility.",
-                images: [
-                    "swimming_pool_1.png",
-                    "swimming_pool_2.png",
-                    "swimming_pool_3.png"
-                ],
-                price4h: "-",
-                price8h: "3 300 000 ₸"
-            },
-            {
-                id: 16,
-                name: "Game Hall",
-                category: "Sports",
-                capacity: 0,
-                size: "N/A",
-                location: "Athletic Center",
-                description: "Multipurpose indoor sports hall for various athletic activities.",
-                images: [
-                    "game_hall_athletic_1.png",
-                    "game_hall_athletic_2.png",
-                    "game_hall_athletic_3.png"
-                ],
-                price4h: "800 000 ₸",
-                price8h: "1 600 000 ₸"
-            },
-            {
-                id: 17,
-                name: "Block 7E Classroom",
-                category: "Classroom",
-                capacity: 51,
-                size: "4196.44 m²",
-                location: "Block 7E",
-                description: "IT support is included.",
-                images: [
-                    "7e_classroom_1.png",
-                    "7e_classroom_2.png",
-                    "7e_classroom_3.png"
-                ],
-                price4h: "300 000 ₸",
-                price8h: "500 000 ₸"
-            },
-            {
-                id: 18,
-                name: "Game Hall",
-                category: "Sports",
-                capacity: 0,
-                size: "N/A",
-                location: "Sports Center",
-                description: "Multipurpose indoor sports hall located in the Sports Center.",
-                images: [
-                    "game_hall_sports_1.png",
-                    "game_hall_sports_2.png",
-                    "game_hall_sports_3.png"
-                ],
-                price4h: "600 000 ₸",
-                price8h: "1 100 000 ₸"
-            }
+            { id: 1, name: "Main Hall", category: "Hall", capacity: 720, size: "1319.00 m²", location: "Block C2", description: "IT support is included.", images: ["main_hall_1.png", "main_hall_2.png", "main_hall_3.png"], price4h: "3 000 000 ₸", price8h: "5 800 000 ₸" },
+            { id: 2, name: "Orange Hall", category: "Hall", capacity: 450, size: "585.13 m²", location: "Block C2", description: "IT support is included.", images: ["orange_hall_1.png", "orange_hall_1-1.png", "orange_hall_1-2.png"], price4h: "1 200 000 ₸", price8h: "2 400 000 ₸" },
+            { id: 3, name: "Cinema Hall", category: "Hall", capacity: 371, size: "536.80 m²", location: "Block D-7", description: "IT support is included.", images: ["cinema_hall_1.png", "cinema_hall_2.png", "cinema_hall_3.png"], price4h: "1 400 000 ₸", price8h: "2 700 000 ₸" },
+            { id: 4, name: "NUSOM Hall", category: "Hall", capacity: 320, size: "416.50 m²", location: "NUSOM", description: "IT support is included.", images: ["nusom_hall_1.png", "nusom_hall_3.png", "nusom_hall_3-1.png"], price4h: "900 000 ₸", price8h: "1 700 000 ₸" },
+            { id: 5, name: "Senate Hall", category: "Hall", capacity: 260, size: "754.60 m²", location: "Block 1", description: "IT support is included.", images: ["senate_hall_1.png", "senate_hall_2.png", "senate_hall_3.png"], price4h: "1 200 000 ₸", price8h: "2 200 000 ₸" },
+            { id: 6, name: "Ballroom (Left)", category: "Hall", capacity: 480, size: "557.77 m²", location: "Block C2", description: "IT support is included.", images: ["ballroom_left_1.png", "ballroom_left_2.png", "ballroom_left_3.png"], price4h: "1 100 000 ₸", price8h: "2 000 000 ₸" },
+            { id: 7, name: "Ballroom (Right)", category: "Hall", capacity: 480, size: "551.77 m²", location: "Block C2", description: "IT support is included.", images: ["ballroom_right_1.png", "ballroom_right_2.png", "ballroom_right_3.png"], price4h: "1 100 000 ₸", price8h: "2 000 000 ₸" },
+            { id: 8, name: "Red Hall", category: "Hall", capacity: 240, size: "270.58 m²", location: "Block C3", description: "IT support is included.", images: ["red_hall_1.png", "red_hall_2.png", "red_hall_3.png"], price4h: "700 000 ₸", price8h: "1 200 000 ₸" },
+            { id: 9, name: "Blue Hall", category: "Hall", capacity: 239, size: "282.55 m²", location: "Block C2", description: "IT support is included.", images: ["blue_hall_1.png", "blue_hall_2.png", "blue_hall_3.png"], price4h: "700 000 ₸", price8h: "1 400 000 ₸" },
+            { id: 10, name: "Green Hall", category: "Hall", capacity: 231, size: "277.53 m²", location: "Block C2", description: "IT support is included.", images: ["green_hall_1.png", "green_hall_2.png", "green_hall_3.png"], price4h: "700 000 ₸", price8h: "1 300 000 ₸" },
+            { id: 11, name: "Room 1010", category: "Classroom", capacity: 80, size: "169.54 m²", location: "Block C3", description: "IT support is included.", images: ["1010_1.png", "1010_2.png", "1010_3.png"], price4h: "300 000 ₸", price8h: "600 000 ₸" },
+            { id: 12, name: "Room 2001", category: "Classroom", capacity: 60, size: "133.00 m²", location: "Block C3", description: "IT support is included.", images: ["2001_1.png", "2001_2.png", "2001_3.png"], price4h: "300 000 ₸", price8h: "500 000 ₸" },
+            { id: 13, name: "Upper Atrium", category: "Space", capacity: 0, size: "2113.20 m²", location: "Block C2", description: "IT support is included.", images: ["upper_atrium_1.png", "upper_atrium_2.png", "upper_atrium_3.png"], price4h: "1 300 000 ₸", price8h: "2 500 000 ₸" },
+            { id: 14, name: "Swimming Pool (3 Lanes)", category: "Sports", capacity: 0, size: "N/A", location: "Athletic Center", description: "Professional grade swimming pool lanes for training or events.", images: ["swimming_pool_3lanes_1.png", "swimming_pool_3lanes_2.png", "swimming_pool_3lanes_3.png"], price4h: "900 000 ₸", price8h: "1 800 000 ₸" },
+            { id: 15, name: "Swimming Pool", category: "Sports", capacity: 0, size: "N/A", location: "Athletic Center", description: "Full Olympic-size swimming pool facility.", images: ["swimming_pool_1.png", "swimming_pool_2.png", "swimming_pool_3.png"], price4h: "-", price8h: "3 300 000 ₸" },
+            { id: 16, name: "Game Hall", category: "Sports", capacity: 0, size: "N/A", location: "Athletic Center", description: "Multipurpose indoor sports hall for various athletic activities.", images: ["game_hall_athletic_1.png", "game_hall_athletic_2.png", "game_hall_athletic_3.png"], price4h: "800 000 ₸", price8h: "1 600 000 ₸" },
+            { id: 17, name: "Block 7E Classroom", category: "Classroom", capacity: 51, size: "4196.44 m²", location: "Block 7E", description: "IT support is included.", images: ["7e_classroom_1.png", "7e_classroom_2.png", "7e_classroom_3.png"], price4h: "300 000 ₸", price8h: "500 000 ₸" },
+            { id: 18, name: "Game Hall", category: "Sports", capacity: 0, size: "N/A", location: "Sports Center", description: "Multipurpose indoor sports hall located in the Sports Center.", images: ["game_hall_sports_1.png", "game_hall_sports_2.png", "game_hall_sports_3.png"], price4h: "600 000 ₸", price8h: "1 100 000 ₸" }
         ];
 
         // State
         let currentCategory = 'all';
         let minCapacity = 0;
-        let viewMode = 'grid'; // 'grid' or 'list'
+        let viewMode = 'grid';
 
         // Intersection Observer for Scroll Animations
         const observerOptions = {
@@ -675,26 +411,15 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('card-enter-active');
-                    observer.unobserve(entry.target); // Only animate once
+                    observer.unobserve(entry.target); 
                 }
             });
         }, observerOptions);
-
-        // Parallax Effect
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const heroBg = document.getElementById('hero-bg');
-            if (heroBg) {
-                // Move background slower than scroll
-                heroBg.style.transform = `translateY(${scrollY * 0.4}px)`;
-            }
-        });
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             renderHalls();
             
-            // Filter Listeners
             const capacityRange = document.getElementById('capacityRange');
             const capacityValue = document.getElementById('capacityValue');
             
@@ -708,36 +433,43 @@
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     filterBtns.forEach(b => {
-                        b.classList.remove('bg-nu-gold', 'text-white', 'shadow-md', 'transform', 'scale-105');
-                        b.classList.add('bg-gray-100', 'text-gray-600');
+                        b.classList.remove('bg-nu-blue', 'text-white', 'shadow-lg', 'scale-105');
+                        b.classList.add('bg-white/40', 'text-gray-600');
                     });
-                    btn.classList.remove('bg-gray-100', 'text-gray-600');
-                    btn.classList.add('bg-nu-gold', 'text-white', 'shadow-md', 'transform', 'scale-105');
+                    btn.classList.remove('bg-white/40', 'text-gray-600');
+                    btn.classList.add('bg-nu-blue', 'text-white', 'shadow-lg', 'scale-105');
                     currentCategory = btn.dataset.category;
                     renderHalls();
                 });
             });
         });
 
-        // Set View Mode
+        // Mobile View Toggle
+        function toggleViewModeMobile() {
+            if (viewMode === 'grid') {
+                setViewMode('list');
+                document.getElementById('mobileViewIcon').className = 'fas fa-list';
+            } else {
+                setViewMode('grid');
+                document.getElementById('mobileViewIcon').className = 'fas fa-th-large';
+            }
+        }
+
         function setViewMode(mode) {
             viewMode = mode;
             renderHalls();
         }
 
-        // Render Function
         function renderHalls() {
             const grid = document.getElementById('hallsGrid');
             const emptyState = document.getElementById('emptyState');
             
-            // Animate exit
-            const existingCards = grid.querySelectorAll('div > div.glass-card');
+            const existingCards = grid.querySelectorAll('.apple-glass');
             existingCards.forEach(card => card.style.opacity = '0');
 
             setTimeout(() => {
                 grid.innerHTML = '';
                 
-                // Adjust Grid Class for List Mode
                 if (viewMode === 'list') {
                     grid.classList.remove('md:grid-cols-2', 'lg:grid-cols-3');
                     grid.classList.add('grid-cols-1');
@@ -754,7 +486,6 @@
 
                 if (filtered.length === 0) {
                     emptyState.classList.remove('hidden');
-                    // Small delay to allow fade out to finish before showing empty state
                     setTimeout(() => emptyState.classList.remove('opacity-0'), 50);
                     return;
                 } else {
@@ -764,68 +495,76 @@
 
                 filtered.forEach((hall, index) => {
                     const cardWrapper = document.createElement('div');
-                    // Add animation class base
-                    cardWrapper.className = 'card-enter';
-                    // Stagger animation delays
+                    cardWrapper.className = 'card-enter h-full';
                     cardWrapper.style.transitionDelay = `${index * 50}ms`;
                     
                     const capacityText = hall.capacity > 0 ? `${hall.capacity}` : 'N/A';
                     
+                    // Use APPLE-GLASS class
                     if (viewMode === 'list') {
-                        // List Layout
+                        // SHORTER CARD (h-48 on desktop) and "Starting From" added
                         cardWrapper.innerHTML = `
-                            <div class="glass-card rounded-2xl overflow-hidden flex flex-col md:flex-row h-auto md:h-64 group cursor-pointer transition-all border border-gray-100 hover:border-nu-gold/30" onclick="openModal(${hall.id})">
-                                <div class="w-full md:w-2/5 h-48 md:h-full relative overflow-hidden">
+                            <div class="apple-glass rounded-2xl overflow-hidden flex flex-col md:flex-row h-auto md:h-48 group cursor-pointer transition-all border border-white/60" onclick="openModal(${hall.id})">
+                                <div class="w-full md:w-64 h-48 md:h-full relative overflow-hidden flex-shrink-0">
                                     <img src="${hall.images[0]}" alt="${hall.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                                    <div class="absolute inset-0 bg-gradient-to-r from-gray-900/10 to-transparent"></div>
                                 </div>
-                                <div class="p-8 flex-grow flex flex-col justify-center">
-                                    <div class="flex justify-between items-start mb-2">
-                                        <div>
-                                            <span class="text-xs font-bold px-2 py-1 bg-gray-100 text-nu-blue rounded mb-3 inline-block uppercase tracking-wider border border-gray-200">${hall.category}</span>
-                                            <h3 class="text-2xl font-display text-nu-blue group-hover:text-nu-gold transition duration-300">${hall.name}</h3>
+                                <div class="p-4 md:p-6 flex-grow flex flex-col justify-center">
+                                    <div class="flex justify-between items-start mb-1">
+                                        <div class="flex-grow">
+                                            <span class="text-[10px] font-bold px-2 py-0.5 bg-white/60 text-nu-blue rounded mb-1 inline-block uppercase tracking-wider border border-white/40 shadow-sm">${hall.category}</span>
+                                            <h3 class="text-lg md:text-xl font-display text-nu-blue group-hover:text-nu-gold transition duration-300 drop-shadow-sm pr-2 leading-tight">${hall.name}</h3>
                                         </div>
-                                        <span class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-nu-gold group-hover:text-white transition-all duration-300 shrink-0 ml-4 border border-gray-100 shadow-sm group-hover:shadow-md">
-                                            <i class="fas fa-arrow-right text-gray-400 group-hover:text-white transform group-hover:translate-x-1 transition-transform"></i>
+                                        <span class="w-8 h-8 rounded-full bg-white/60 flex items-center justify-center group-hover:bg-nu-blue group-hover:text-white transition-all duration-300 shrink-0 ml-2 border border-white/50 shadow-sm">
+                                            <i class="fas fa-arrow-right text-gray-400 text-xs group-hover:text-white transform group-hover:translate-x-1 transition-transform"></i>
                                         </span>
                                     </div>
-                                    <div class="flex items-center gap-6 mb-4 text-sm text-gray-500">
-                                        <div class="flex items-center"><i class="fas fa-users text-nu-gold mr-2"></i> ${capacityText}</div>
-                                        <div class="flex items-center"><i class="fas fa-expand text-nu-gold mr-2"></i> ${hall.size}</div>
-                                        <div class="flex items-center hidden sm:flex"><i class="fas fa-map-marker-alt text-nu-gold mr-2"></i> ${hall.location}</div>
+                                    <div class="flex flex-wrap items-center gap-3 mb-2 text-xs text-gray-600 font-medium">
+                                        <div class="flex items-center"><i class="fas fa-users text-nu-gold mr-1.5"></i> ${capacityText}</div>
+                                        <div class="flex items-center"><i class="fas fa-expand text-nu-gold mr-1.5"></i> ${hall.size}</div>
+                                        <div class="flex items-center"><i class="fas fa-map-marker-alt text-nu-gold mr-1.5"></i> ${hall.location}</div>
                                     </div>
-                                    <div class="flex items-center text-nu-blue font-semibold font-display mt-auto">
-                                        Starting from ${hall.price4h !== '-' ? hall.price4h : hall.price8h}
+                                    <div class="flex flex-col mt-auto">
+                                        <span class="text-[9px] uppercase tracking-wide text-gray-500 font-bold">Starting From</span>
+                                        <div class="flex items-center text-nu-blue font-bold font-display text-base md:text-lg">
+                                            ${hall.price4h !== '-' ? hall.price4h : hall.price8h}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         `;
                     } else {
-                        // Grid Layout (Card)
+                        // Grid View (Location on Image kept)
                         cardWrapper.innerHTML = `
-                            <div class="glass-card rounded-3xl overflow-hidden flex flex-col h-full group cursor-pointer border border-gray-100" onclick="openModal(${hall.id})">
-                                <div class="h-56 overflow-hidden relative">
+                            <div class="apple-glass rounded-3xl overflow-hidden flex flex-col h-full group cursor-pointer border border-white/60" onclick="openModal(${hall.id})">
+                                <div class="h-48 sm:h-56 md:h-60 overflow-hidden relative">
                                     <img src="${hall.images[0]}" alt="${hall.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                                     <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-60"></div>
-                                    <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                                    
+                                    <!-- Location Badge on Image Bottom Right -->
+                                    <div class="absolute bottom-3 right-3 bg-white/20 backdrop-blur-md px-2 py-1 rounded-lg border border-white/30 shadow-sm z-10 flex items-center">
+                                         <i class="fas fa-map-marker-alt text-nu-gold text-xs mr-1"></i>
+                                         <span class="text-[10px] sm:text-xs font-semibold text-white tracking-wide">${hall.location}</span>
+                                    </div>
+
+                                    <div class="absolute bottom-4 left-4 right-16 flex justify-between items-end">
                                         <div>
-                                            <span class="text-xs font-bold px-2 py-1 bg-white/90 backdrop-blur rounded text-nu-blue mb-2 inline-block uppercase tracking-wider shadow-sm">${hall.category}</span>
-                                            <h3 class="text-xl font-display text-white group-hover:text-nu-gold transition-colors duration-300 shadow-black drop-shadow-lg">${hall.name}</h3>
+                                            <span class="text-[9px] sm:text-[10px] font-bold px-2 py-1 bg-white/90 backdrop-blur-md rounded text-nu-blue mb-2 inline-block uppercase tracking-wider shadow-sm">${hall.category}</span>
+                                            <h3 class="text-lg sm:text-xl font-display text-white group-hover:text-nu-gold transition-colors duration-300 shadow-black drop-shadow-md leading-tight">${hall.name}</h3>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="p-6 flex-grow flex flex-col bg-white/40">
-                                    <div class="flex justify-between items-center mb-4 text-sm text-gray-600">
-                                        <div class="flex items-center bg-white/60 px-2 py-1 rounded-md"><i class="fas fa-users text-nu-gold mr-2"></i> ${capacityText}</div>
-                                        <div class="flex items-center bg-white/60 px-2 py-1 rounded-md"><i class="fas fa-expand text-nu-gold mr-2"></i> ${hall.size}</div>
+                                <div class="p-5 sm:p-6 flex-grow flex flex-col">
+                                    <div class="flex justify-between items-center mb-4 text-xs sm:text-sm text-gray-700 font-medium">
+                                        <div class="flex items-center bg-white/40 px-2 sm:px-3 py-1.5 rounded-lg border border-white/40"><i class="fas fa-users text-nu-gold mr-2"></i> ${capacityText}</div>
+                                        <div class="flex items-center bg-white/40 px-2 sm:px-3 py-1.5 rounded-lg border border-white/40"><i class="fas fa-expand text-nu-gold mr-2"></i> ${hall.size}</div>
                                     </div>
-                                    <div class="pt-4 border-t border-gray-100/50 flex justify-between items-center mt-auto">
+                                    <div class="pt-4 border-t border-gray-400/20 flex justify-between items-center mt-auto">
                                         <div class="flex flex-col">
-                                            <span class="text-[10px] uppercase tracking-wide text-gray-400 font-bold">Starting From</span>
+                                            <span class="text-[9px] uppercase tracking-wide text-gray-500 font-bold">Starting From</span>
                                             <span class="text-nu-blue font-bold text-sm font-display">${hall.price4h !== '-' ? hall.price4h : hall.price8h}</span>
                                         </div>
-                                        <span class="w-10 h-10 rounded-full bg-white flex items-center justify-center group-hover:bg-nu-gold group-hover:text-white transition-all duration-300 border border-gray-100 shadow-sm">
-                                            <i class="fas fa-arrow-right text-sm text-gray-400 group-hover:text-white transform group-hover:translate-x-0.5 transition-transform"></i>
+                                        <span class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/60 flex items-center justify-center group-hover:bg-nu-blue group-hover:text-white transition-all duration-300 border border-white/50 shadow-sm">
+                                            <i class="fas fa-arrow-right text-xs sm:text-sm text-gray-500 group-hover:text-white transform group-hover:translate-x-0.5 transition-transform"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -833,11 +572,9 @@
                         `;
                     }
                     grid.appendChild(cardWrapper);
-                    
-                    // Observe the newly added card for animation
                     observer.observe(cardWrapper);
                 });
-            }, 200); // Small delay to allow clear-out
+            }, 200);
         }
 
         // Modal Logic
@@ -852,7 +589,6 @@
             const hall = halls.find(h => h.id === id);
             if (!hall) return;
 
-            // Populate Text Info
             document.getElementById('modalTitle').textContent = hall.name;
             document.getElementById('modalCategory').textContent = hall.category;
             document.getElementById('modalCapacity').textContent = hall.capacity > 0 ? `${hall.capacity} Capacity` : 'Flexible Capacity';
@@ -862,30 +598,20 @@
             document.getElementById('modalPrice4h').textContent = hall.price4h;
             document.getElementById('modalPrice8h').textContent = hall.price8h;
 
-            // Populate Gallery
             gallery.innerHTML = '';
-            
-            // Add images from array
             hall.images.forEach(imgSrc => {
                 const imgContainer = document.createElement('div');
                 imgContainer.className = 'w-full h-full flex-shrink-0 snap-center relative bg-gray-200';
-                imgContainer.innerHTML = `
-                    <img src="${imgSrc}" class="w-full h-full object-cover">
-                `;
+                imgContainer.innerHTML = `<img src="${imgSrc}" class="w-full h-full object-cover">`;
                 gallery.appendChild(imgContainer);
             });
 
-            // Show Modal
             modalOverlay.classList.remove('hidden');
-            // Force reflow
             void modalOverlay.offsetWidth;
-            
             modalOverlay.classList.remove('opacity-0');
-            modalContent.classList.remove('scale-90');
+            modalContent.classList.remove('scale-95');
             modalContent.classList.add('scale-100');
             document.body.style.overflow = 'hidden';
-            
-            // Reset Scroll
             gallery.scrollLeft = 0;
             updateGalleryButtons();
         }
@@ -893,12 +619,11 @@
         function closeModal() {
             modalOverlay.classList.add('opacity-0');
             modalContent.classList.remove('scale-100');
-            modalContent.classList.add('scale-90');
-            
+            modalContent.classList.add('scale-95');
             setTimeout(() => {
                 modalOverlay.classList.add('hidden');
                 document.body.style.overflow = 'auto';
-            }, 400); // Match transition duration
+            }, 400);
         }
         
         function openContactModal() {
@@ -921,34 +646,27 @@
             }, 300);
         }
 
-        // Gallery Navigation
         function scrollGallery(direction) {
             const width = gallery.clientWidth;
             gallery.scrollBy({ left: width * direction, behavior: 'smooth' });
         }
 
-        // Update Buttons Visibility on Scroll
         gallery.addEventListener('scroll', () => {
             updateGalleryButtons();
         });
 
         function updateGalleryButtons() {
-            // Show/Hide Prev Button
             if (gallery.scrollLeft <= 10) {
-                prevBtn.classList.add('opacity-0', 'pointer-events-none');
+                prevBtn.classList.add('opacity-0', 'pointer-events-none', 'translate-x-4');
                 prevBtn.classList.remove('translate-x-0');
-                prevBtn.classList.add('translate-x-4');
             } else {
                 prevBtn.classList.remove('opacity-0', 'pointer-events-none', 'translate-x-4');
                 prevBtn.classList.add('translate-x-0');
             }
 
-            // Show/Hide Next Button
-            // Tolerance of 10px for rounding errors
             if (gallery.scrollLeft + gallery.clientWidth >= gallery.scrollWidth - 10) {
-                nextBtn.classList.add('opacity-0', 'pointer-events-none');
+                nextBtn.classList.add('opacity-0', 'pointer-events-none', '-translate-x-4');
                 nextBtn.classList.remove('translate-x-0');
-                nextBtn.classList.add('-translate-x-4');
             } else {
                 nextBtn.classList.remove('opacity-0', 'pointer-events-none', '-translate-x-4');
                 nextBtn.classList.add('translate-x-0');
