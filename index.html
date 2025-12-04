@@ -414,7 +414,7 @@
         // State
         let currentCategory = 'all';
         let minCapacity = 0;
-        let viewMode = 'grid'; // Default view is grid
+        let viewMode = 'list'; // Start in list mode after the user's latest request
 
         // Intersection Observer for Scroll Animations
         const observerOptions = {
@@ -459,7 +459,8 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            // Set initial button state
+            // Set initial view mode to list and update button state
+            viewMode = 'list'; 
             updateViewButtons();
             renderHalls();
             
@@ -530,9 +531,10 @@
                 
                 // Use APPLE-GLASS class
                 if (viewMode === 'list') {
-                    // Applied list-view-card-mobile class to increase card height on mobile
+                    // UPDATED: Desktop List View: md:h-36 (lower height), md:w-64 (16:9 aspect for h-36 is approx w-64), enlarged detail text.
                     cardWrapper.innerHTML = `
-                        <div class="apple-glass rounded-2xl overflow-hidden flex flex-col md:flex-row h-auto list-view-card-mobile md:h-48 group cursor-pointer transition-all border border-white/60" onclick="openModal(${hall.id})">
+                        <div class="apple-glass rounded-2xl overflow-hidden flex flex-col md:flex-row h-auto list-view-card-mobile md:h-36 group cursor-pointer transition-all border border-white/60" onclick="openModal(${hall.id})">
+                            <!-- Image container adjusted for compact size (w-64 h-full) -->
                             <div class="w-full md:w-64 h-48 md:h-full relative overflow-hidden flex-shrink-0">
                                 <img src="${hall.images[0]}" alt="${hall.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                             </div>
@@ -540,24 +542,27 @@
                                 <div class="flex justify-between items-start mb-1">
                                     <div class="flex-grow">
                                         <span class="text-[10px] font-bold px-2 py-0.5 bg-white/60 text-nu-blue rounded mb-1 inline-block uppercase tracking-wider border border-white/40 shadow-sm">${hall.category}</span>
-                                        <h3 class="text-lg md:text-xl font-display text-nu-blue group-hover:text-nu-gold transition duration-300 drop-shadow-sm pr-2 leading-tight">${hall.name}</h3>
+                                        <!-- Venue Name - Kept at md:text-2xl -->
+                                        <h3 class="text-lg md:text-2xl font-display text-nu-blue group-hover:text-nu-gold transition duration-300 drop-shadow-sm pr-2 leading-tight">${hall.name}</h3>
                                     </div>
                                     <span class="w-8 h-8 rounded-full bg-white/60 flex items-center justify-center group-hover:bg-nu-blue group-hover:text-white transition-all duration-300 shrink-0 ml-2 border border-white/50 shadow-sm">
                                         <i class="fas fa-arrow-right text-gray-400 text-xs group-hover:text-white transform group-hover:translate-x-1 transition-transform"></i>
                                     </span>
                                 </div>
-                                <div class="flex flex-wrap items-center gap-3 mb-2 text-xs text-gray-600 font-medium">
+                                <!-- Details - Increased text size to md:text-base on desktop -->
+                                <div class="flex flex-wrap items-center gap-3 mb-2 text-sm md:text-base text-gray-600 font-medium">
                                     <div class="flex items-center"><i class="fas fa-users text-nu-gold mr-1.5"></i> ${capacityText}</div>
                                     <div class="flex items-center"><i class="fas fa-expand text-nu-gold mr-1.5"></i> ${hall.size}</div>
                                     <div class="flex items-center"><i class="fas fa-map-marker-alt text-nu-gold mr-1.5"></i> ${hall.location}</div>
                                 </div>
                                 <div class="flex flex-col mt-auto">
                                     <span class="text-[9px] uppercase tracking-wide text-gray-500 font-bold">Starting From (4h)</span>
-                                    <div class="flex items-center text-nu-blue font-bold font-display text-base md:text-lg">
+                                    <!-- Price - Increased desktop size to md:text-2xl -->
+                                    <div class="flex items-center text-nu-blue font-bold font-display text-base md:text-2xl leading-none">
                                         ${hall.price4h !== '-' ? hall.price4h : hall.price8h}
                                     </div>
                                 </div>
-                                <!-- Mobile Price Visibility Fix for 8h -->
+                                <!-- Mobile Price Visibility Fix for 8h (Hidden on desktop) -->
                                 <div class="md:hidden flex flex-col mt-2">
                                     <span class="text-[9px] uppercase tracking-wide text-gray-500 font-bold">8 Hour Rental</span>
                                     <div class="flex items-center text-nu-blue font-bold font-display text-sm">
@@ -568,7 +573,7 @@
                         </div>
                     `;
                 } else {
-                    // Grid View (Location on Image kept)
+                    // Grid View (No Changes)
                     cardWrapper.innerHTML = `
                         <div class="apple-glass rounded-3xl overflow-hidden flex flex-col h-full group cursor-pointer transition-all border border-white/60" onclick="openModal(${hall.id})">
                             <div class="h-48 sm:h-56 md:h-60 overflow-hidden relative">
