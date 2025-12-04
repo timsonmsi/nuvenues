@@ -67,12 +67,26 @@
             border-color: rgba(255, 255, 255, 0.9);
         }
 
-        /* Nav specific glass - NO longer fixed, just standard positioning */
+        /* DARK Header Styling (Transparent Black/Dark Blue) - Opacity reduced to 0.4 */
         .nav-glass {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(0, 0, 0, 0.4); /* Dark background with 40% opacity */
+            background-image: linear-gradient(to right, rgba(0, 30, 70, 0.1), rgba(0, 0, 0, 0.4));
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: white; /* Light text for contrast */
+        }
+        .nav-glass .logo-text {
+             color: #C5B358; /* Gold color for the text */
+        }
+        .nav-glass .nav-btn {
+            background: rgba(255, 255, 255, 0.1); /* Light transparent button */
+            color: white; /* Light text */
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .nav-glass .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
         }
 
         /* Modern Gradient Background */
@@ -121,6 +135,20 @@
             background: rgba(0,0,0,0.2);
             border-radius: 3px;
         }
+        
+        /* View Switch Button Styling */
+        .view-switch-btn {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: #003366;
+            transition: all 0.3s;
+        }
+        .view-switch-btn.active {
+            background: #003366;
+            color: white;
+            border-color: #003366;
+            box-shadow: 0 4px 10px rgba(0, 51, 102, 0.4);
+        }
     </style>
 </head>
 <body class="antialiased text-gray-800">
@@ -128,38 +156,27 @@
     <!-- GLOBAL BACKGROUND -->
     <div id="bg-container"></div>
 
-    <!-- Navigation (NOT FIXED ANYMORE) -->
+    <!-- Navigation (SCROLLABLE on mobile, NOT FIXED) -->
     <nav class="w-full z-50 nav-glass top-0 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
-                <!-- Logo & VENUES text (Visible on all screens) -->
+                <!-- Logo & VENUES text -->
                 <div class="flex items-center space-x-3 group cursor-pointer" onclick="window.scrollTo(0,0)">
                     <img src="NU_Logo_ENG-01.png" alt="Nazarbayev University" class="h-10 sm:h-12 w-auto object-contain transition-transform duration-500 group-hover:scale-105">
-                    <!-- Text is now visible on mobile, with adjusted size -->
-                    <span class="font-sans font-light text-[10px] sm:text-sm text-nu-gold ml-2 uppercase tracking-widest border-l border-gray-400 pl-2 block">VENUES</span> 
+                    <span class="font-sans font-light text-[10px] sm:text-sm ml-2 uppercase tracking-widest border-l border-gray-400 pl-2 block logo-text">VENUES</span> 
                 </div>
                 
                 <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <div class="relative group">
-                            <button id="viewOptionsBtn" class="bg-white/50 border border-white/50 hover:bg-white text-gray-700 hover:text-nu-blue px-4 py-2 rounded-full transition duration-300 text-sm font-medium flex items-center gap-2 shadow-sm backdrop-blur-md">
-                                <i class="fas fa-layer-group text-nu-gold"></i> View Options
-                            </button>
-                            <!-- Dropdown -->
-                            <div class="absolute right-0 mt-2 w-48 apple-glass rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-right scale-95 group-hover:scale-100 z-50 overflow-hidden">
-                                <div class="p-1">
-                                    <button onclick="setViewMode('grid')" class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-white/60 rounded-xl transition-colors">
-                                        <i class="fas fa-th-large w-5 mr-3 text-nu-blue"></i> Grid View
-                                    </button>
-                                    <button onclick="setViewMode('list')" class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-white/60 rounded-xl transition-colors">
-                                        <i class="fas fa-list w-5 mr-3 text-nu-blue"></i> List View
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- NEW View Switch Buttons - Replaces Dropdown -->
+                    <div class="ml-10 flex items-baseline space-x-1">
+                        <button id="viewGridBtn" class="view-switch-btn p-3 rounded-xl hover:scale-105 transition-transform" onclick="setViewMode('grid')" aria-label="Grid View">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button id="viewListBtn" class="view-switch-btn p-3 rounded-xl hover:scale-105 transition-transform" onclick="setViewMode('list')" aria-label="List View">
+                            <i class="fas fa-list"></i>
+                        </button>
                     </div>
                 </div>
-                <!-- Mobile View Options Toggle Button (Removed) -->
             </div>
         </div>
     </nav>
@@ -362,10 +379,7 @@
             </div>
             <div class="mt-12 sm:mt-16 pt-8 border-t border-gray-300/30 flex flex-col md:flex-row justify-between items-center text-[10px] sm:text-xs text-gray-500 gap-4">
                 <p>&copy; 2025 Nazarbayev University. All rights reserved.</p>
-                <div class="flex gap-4">
-                    <a href="#" class="hover:text-nu-blue transition-colors">Privacy</a>
-                    <a href="#" class="hover:text-nu-blue transition-colors">Terms</a>
-                </div>
+                <!-- Removed Privacy and Terms links -->
             </div>
         </div>
     </footer>
@@ -396,7 +410,7 @@
         // State
         let currentCategory = 'all';
         let minCapacity = 0;
-        let viewMode = 'grid';
+        let viewMode = 'grid'; // Default view is grid
 
         // Intersection Observer for Scroll Animations
         const observerOptions = {
@@ -414,8 +428,33 @@
             });
         }, observerOptions);
 
+        
+        // Helper to update the button active state based on current viewMode
+        function updateViewButtons() {
+            const gridBtn = document.getElementById('viewGridBtn');
+            const listBtn = document.getElementById('viewListBtn');
+
+            if (viewMode === 'grid') {
+                gridBtn.classList.add('active');
+                listBtn.classList.remove('active');
+            } else {
+                listBtn.classList.add('active');
+                gridBtn.classList.remove('active');
+            }
+        }
+
+        // Set view mode and re-render
+        function setViewMode(mode) {
+            viewMode = mode;
+            updateViewButtons();
+            renderHalls();
+        }
+
+
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
+            // Set initial button state
+            updateViewButtons();
             renderHalls();
             
             const capacityRange = document.getElementById('capacityRange');
@@ -440,139 +479,130 @@
                     renderHalls();
                 });
             });
+
+             // Attaching click listeners to the new view switch buttons
+            document.getElementById('viewGridBtn').addEventListener('click', () => setViewMode('grid'));
+            document.getElementById('viewListBtn').addEventListener('click', () => setViewMode('list'));
         });
-
-        // Mobile View Toggle
-        function toggleViewModeMobile() {
-            if (viewMode === 'grid') {
-                setViewMode('list');
-                document.getElementById('mobileViewIcon').className = 'fas fa-list';
-            } else {
-                setViewMode('grid');
-                document.getElementById('mobileViewIcon').className = 'fas fa-th-large';
-            }
-        }
-
-        function setViewMode(mode) {
-            viewMode = mode;
-            renderHalls();
-        }
-
+        
         function renderHalls() {
             const grid = document.getElementById('hallsGrid');
             const emptyState = document.getElementById('emptyState');
             
-            const existingCards = grid.querySelectorAll('.apple-glass');
-            existingCards.forEach(card => card.style.opacity = '0');
+            // Clear grid content immediately
+            grid.innerHTML = '';
+            
+            if (viewMode === 'list') {
+                grid.classList.remove('md:grid-cols-2', 'lg:grid-cols-3');
+                grid.classList.add('grid-cols-1');
+            } else {
+                grid.classList.add('md:grid-cols-2', 'lg:grid-cols-3');
+                grid.classList.remove('grid-cols-1');
+            }
+            
+            const filtered = halls.filter(hall => {
+                const matchCat = currentCategory === 'all' || hall.category === currentCategory;
+                const matchCap = minCapacity === 0 ? true : hall.capacity >= minCapacity;
+                return matchCat && matchCap;
+            });
 
-            setTimeout(() => {
-                grid.innerHTML = '';
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                setTimeout(() => emptyState.classList.remove('opacity-0'), 50);
+                return;
+            } else {
+                emptyState.classList.add('opacity-0');
+                emptyState.classList.add('hidden');
+            }
+
+            filtered.forEach((hall, index) => {
+                const cardWrapper = document.createElement('div');
+                cardWrapper.className = 'card-enter h-full';
+                cardWrapper.style.transitionDelay = `${index * 50}ms`;
                 
+                const capacityText = hall.capacity > 0 ? `${hall.capacity}` : 'N/A';
+                
+                // Use APPLE-GLASS class
                 if (viewMode === 'list') {
-                    grid.classList.remove('md:grid-cols-2', 'lg:grid-cols-3');
-                    grid.classList.add('grid-cols-1');
-                } else {
-                    grid.classList.add('md:grid-cols-2', 'lg:grid-cols-3');
-                    grid.classList.remove('grid-cols-1');
-                }
-                
-                const filtered = halls.filter(hall => {
-                    const matchCat = currentCategory === 'all' || hall.category === currentCategory;
-                    const matchCap = minCapacity === 0 ? true : hall.capacity >= minCapacity;
-                    return matchCat && matchCap;
-                });
-
-                if (filtered.length === 0) {
-                    emptyState.classList.remove('hidden');
-                    setTimeout(() => emptyState.classList.remove('opacity-0'), 50);
-                    return;
-                } else {
-                    emptyState.classList.add('opacity-0');
-                    emptyState.classList.add('hidden');
-                }
-
-                filtered.forEach((hall, index) => {
-                    const cardWrapper = document.createElement('div');
-                    cardWrapper.className = 'card-enter h-full';
-                    cardWrapper.style.transitionDelay = `${index * 50}ms`;
-                    
-                    const capacityText = hall.capacity > 0 ? `${hall.capacity}` : 'N/A';
-                    
-                    // Use APPLE-GLASS class
-                    if (viewMode === 'list') {
-                        // SHORTER CARD (h-48 on desktop) and "Starting From" added
-                        cardWrapper.innerHTML = `
-                            <div class="apple-glass rounded-2xl overflow-hidden flex flex-col md:flex-row h-auto md:h-48 group cursor-pointer transition-all border border-white/60" onclick="openModal(${hall.id})">
-                                <div class="w-full md:w-64 h-48 md:h-full relative overflow-hidden flex-shrink-0">
-                                    <img src="${hall.images[0]}" alt="${hall.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    // SHORTER CARD (h-48 on desktop) and "Starting From" added
+                    cardWrapper.innerHTML = `
+                        <div class="apple-glass rounded-2xl overflow-hidden flex flex-col md:flex-row h-auto md:h-48 group cursor-pointer transition-all border border-white/60" onclick="openModal(${hall.id})">
+                            <div class="w-full md:w-64 h-48 md:h-full relative overflow-hidden flex-shrink-0">
+                                <img src="${hall.images[0]}" alt="${hall.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            </div>
+                            <div class="p-4 md:p-6 flex-grow flex flex-col justify-center">
+                                <div class="flex justify-between items-start mb-1">
+                                    <div class="flex-grow">
+                                        <span class="text-[10px] font-bold px-2 py-0.5 bg-white/60 text-nu-blue rounded mb-1 inline-block uppercase tracking-wider border border-white/40 shadow-sm">${hall.category}</span>
+                                        <h3 class="text-lg md:text-xl font-display text-nu-blue group-hover:text-nu-gold transition duration-300 drop-shadow-sm pr-2 leading-tight">${hall.name}</h3>
+                                    </div>
+                                    <span class="w-8 h-8 rounded-full bg-white/60 flex items-center justify-center group-hover:bg-nu-blue group-hover:text-white transition-all duration-300 shrink-0 ml-2 border border-white/50 shadow-sm">
+                                        <i class="fas fa-arrow-right text-gray-400 text-xs group-hover:text-white transform group-hover:translate-x-1 transition-transform"></i>
+                                    </span>
                                 </div>
-                                <div class="p-4 md:p-6 flex-grow flex flex-col justify-center">
-                                    <div class="flex justify-between items-start mb-1">
-                                        <div class="flex-grow">
-                                            <span class="text-[10px] font-bold px-2 py-0.5 bg-white/60 text-nu-blue rounded mb-1 inline-block uppercase tracking-wider border border-white/40 shadow-sm">${hall.category}</span>
-                                            <h3 class="text-lg md:text-xl font-display text-nu-blue group-hover:text-nu-gold transition duration-300 drop-shadow-sm pr-2 leading-tight">${hall.name}</h3>
-                                        </div>
-                                        <span class="w-8 h-8 rounded-full bg-white/60 flex items-center justify-center group-hover:bg-nu-blue group-hover:text-white transition-all duration-300 shrink-0 ml-2 border border-white/50 shadow-sm">
-                                            <i class="fas fa-arrow-right text-gray-400 text-xs group-hover:text-white transform group-hover:translate-x-1 transition-transform"></i>
-                                        </span>
+                                <div class="flex flex-wrap items-center gap-3 mb-2 text-xs text-gray-600 font-medium">
+                                    <div class="flex items-center"><i class="fas fa-users text-nu-gold mr-1.5"></i> ${capacityText}</div>
+                                    <div class="flex items-center"><i class="fas fa-expand text-nu-gold mr-1.5"></i> ${hall.size}</div>
+                                    <div class="flex items-center"><i class="fas fa-map-marker-alt text-nu-gold mr-1.5"></i> ${hall.location}</div>
+                                </div>
+                                <div class="flex flex-col mt-auto">
+                                    <span class="text-[9px] uppercase tracking-wide text-gray-500 font-bold">Starting From (4h)</span>
+                                    <div class="flex items-center text-nu-blue font-bold font-display text-base md:text-lg">
+                                        ${hall.price4h !== '-' ? hall.price4h : hall.price8h}
                                     </div>
-                                    <div class="flex flex-wrap items-center gap-3 mb-2 text-xs text-gray-600 font-medium">
-                                        <div class="flex items-center"><i class="fas fa-users text-nu-gold mr-1.5"></i> ${capacityText}</div>
-                                        <div class="flex items-center"><i class="fas fa-expand text-nu-gold mr-1.5"></i> ${hall.size}</div>
-                                        <div class="flex items-center"><i class="fas fa-map-marker-alt text-nu-gold mr-1.5"></i> ${hall.location}</div>
+                                </div>
+                                <!-- Mobile Price Visibility Fix for 8h -->
+                                <div class="md:hidden flex flex-col mt-2">
+                                    <span class="text-[9px] uppercase tracking-wide text-gray-500 font-bold">8 Hour Rental</span>
+                                    <div class="flex items-center text-nu-blue font-bold font-display text-sm">
+                                        ${hall.price8h}
                                     </div>
-                                    <div class="flex flex-col mt-auto">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Grid View (Location on Image kept)
+                    cardWrapper.innerHTML = `
+                        <div class="apple-glass rounded-3xl overflow-hidden flex flex-col h-full group cursor-pointer transition-all border border-white/60" onclick="openModal(${hall.id})">
+                            <div class="h-48 sm:h-56 md:h-60 overflow-hidden relative">
+                                <img src="${hall.images[0]}" alt="${hall.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-60"></div>
+                                
+                                <!-- Location Badge on Image Bottom Right -->
+                                <div class="absolute bottom-3 right-3 bg-white/20 backdrop-blur-md px-2 py-1 rounded-lg border border-white/30 shadow-sm z-10 flex items-center">
+                                     <i class="fas fa-map-marker-alt text-nu-gold text-xs mr-1"></i>
+                                     <span class="text-[10px] sm:text-xs font-semibold text-white tracking-wide">${hall.location}</span>
+                                </div>
+
+                                <div class="absolute bottom-4 left-4 right-16 flex justify-between items-end">
+                                    <div>
+                                        <span class="text-[9px] sm:text-[10px] font-bold px-2 py-1 bg-white/90 backdrop-blur-md rounded text-nu-blue mb-2 inline-block uppercase tracking-wider shadow-sm">${hall.category}</span>
+                                        <h3 class="text-lg sm:text-xl font-display text-white group-hover:text-nu-gold transition-colors duration-300 shadow-black drop-shadow-md leading-tight">${hall.name}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-5 sm:p-6 flex-grow flex flex-col">
+                                <div class="flex justify-between items-center mb-4 text-xs sm:text-sm text-gray-700 font-medium">
+                                    <div class="flex items-center bg-white/40 px-2 sm:px-3 py-1.5 rounded-lg border border-white/40"><i class="fas fa-users text-nu-gold mr-2"></i> ${capacityText}</div>
+                                    <div class="flex items-center bg-white/40 px-2 sm:px-3 py-1.5 rounded-lg border border-white/40"><i class="fas fa-expand text-nu-gold mr-2"></i> ${hall.size}</div>
+                                </div>
+                                <div class="pt-4 border-t border-gray-400/20 flex justify-between items-center mt-auto">
+                                    <div class="flex flex-col">
                                         <span class="text-[9px] uppercase tracking-wide text-gray-500 font-bold">Starting From</span>
-                                        <div class="flex items-center text-nu-blue font-bold font-display text-base md:text-lg">
-                                            ${hall.price4h !== '-' ? hall.price4h : hall.price8h}
-                                        </div>
+                                        <span class="text-nu-blue font-bold text-sm font-display">${hall.price4h !== '-' ? hall.price4h : hall.price8h}</span>
                                     </div>
+                                    <span class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/60 flex items-center justify-center group-hover:bg-nu-blue group-hover:text-white transition-all duration-300 border border-white/50 shadow-sm">
+                                        <i class="fas fa-arrow-right text-xs sm:text-sm text-gray-500 group-hover:text-white transform group-hover:translate-x-0.5 transition-transform"></i>
+                                    </span>
                                 </div>
                             </div>
-                        `;
-                    } else {
-                        // Grid View (Location on Image kept)
-                        cardWrapper.innerHTML = `
-                            <div class="apple-glass rounded-3xl overflow-hidden flex flex-col h-full group cursor-pointer border border-white/60" onclick="openModal(${hall.id})">
-                                <div class="h-48 sm:h-56 md:h-60 overflow-hidden relative">
-                                    <img src="${hall.images[0]}" alt="${hall.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-60"></div>
-                                    
-                                    <!-- Location Badge on Image Bottom Right -->
-                                    <div class="absolute bottom-3 right-3 bg-white/20 backdrop-blur-md px-2 py-1 rounded-lg border border-white/30 shadow-sm z-10 flex items-center">
-                                         <i class="fas fa-map-marker-alt text-nu-gold text-xs mr-1"></i>
-                                         <span class="text-[10px] sm:text-xs font-semibold text-white tracking-wide">${hall.location}</span>
-                                    </div>
-
-                                    <div class="absolute bottom-4 left-4 right-16 flex justify-between items-end">
-                                        <div>
-                                            <span class="text-[9px] sm:text-[10px] font-bold px-2 py-1 bg-white/90 backdrop-blur-md rounded text-nu-blue mb-2 inline-block uppercase tracking-wider shadow-sm">${hall.category}</span>
-                                            <h3 class="text-lg sm:text-xl font-display text-white group-hover:text-nu-gold transition-colors duration-300 shadow-black drop-shadow-md leading-tight">${hall.name}</h3>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="p-5 sm:p-6 flex-grow flex flex-col">
-                                    <div class="flex justify-between items-center mb-4 text-xs sm:text-sm text-gray-700 font-medium">
-                                        <div class="flex items-center bg-white/40 px-2 sm:px-3 py-1.5 rounded-lg border border-white/40"><i class="fas fa-users text-nu-gold mr-2"></i> ${capacityText}</div>
-                                        <div class="flex items-center bg-white/40 px-2 sm:px-3 py-1.5 rounded-lg border border-white/40"><i class="fas fa-expand text-nu-gold mr-2"></i> ${hall.size}</div>
-                                    </div>
-                                    <div class="pt-4 border-t border-gray-400/20 flex justify-between items-center mt-auto">
-                                        <div class="flex flex-col">
-                                            <span class="text-[9px] uppercase tracking-wide text-gray-500 font-bold">Starting From</span>
-                                            <span class="text-nu-blue font-bold text-sm font-display">${hall.price4h !== '-' ? hall.price4h : hall.price8h}</span>
-                                        </div>
-                                        <span class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/60 flex items-center justify-center group-hover:bg-nu-blue group-hover:text-white transition-all duration-300 border border-white/50 shadow-sm">
-                                            <i class="fas fa-arrow-right text-xs sm:text-sm text-gray-500 group-hover:text-white transform group-hover:translate-x-0.5 transition-transform"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }
-                    grid.appendChild(cardWrapper);
-                    observer.observe(cardWrapper);
-                });
-            }, 200);
+                        </div>
+                    `;
+                }
+                grid.appendChild(cardWrapper);
+                observer.observe(cardWrapper);
+            });
         }
 
         // Modal Logic
