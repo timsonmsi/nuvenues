@@ -67,26 +67,17 @@
             border-color: rgba(255, 255, 255, 0.9);
         }
 
-        /* DARK Header Styling (Transparent Black/Dark Blue) - Opacity reduced to 0.4 */
+        /* DARK Header Styling */
         .nav-glass {
-            background: rgba(0, 0, 0, 0.4); /* Dark background with 40% opacity */
+            background: rgba(0, 0, 0, 0.4); 
             background-image: linear-gradient(to right, rgba(0, 30, 70, 0.1), rgba(0, 0, 0, 0.4));
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            color: white; /* Light text for contrast */
+            color: white; 
         }
         .nav-glass .logo-text {
-             color: #C5B358; /* Gold color for the text */
-        }
-        .nav-glass .nav-btn {
-            background: rgba(255, 255, 255, 0.1); /* Light transparent button */
-            color: white; /* Light text */
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-        .nav-glass .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+             color: #C5B358; 
         }
 
         /* Modern Gradient Background */
@@ -94,7 +85,6 @@
             position: fixed;
             inset: 0;
             z-index: -1;
-            /* Modern deep gradient */
             background: radial-gradient(circle at top right, #1e293b, #0f172a);
             background-image: 
                 radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
@@ -124,7 +114,7 @@
             scrollbar-width: none;
         }
 
-        /* Custom Scrollbar for Modal content */
+        /* Custom Scrollbar */
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
@@ -149,9 +139,70 @@
             border-color: #003366;
             box-shadow: 0 4px 10px rgba(0, 51, 102, 0.4);
         }
-        /* Fix for mobile list view height */
+
+        /* Language Switcher Styling */
+        .lang-btn {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.35rem 0.6rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s;
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid transparent;
+        }
+        .lang-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .lang-btn.active {
+            color: #C5B358; /* NU Gold */
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(197, 179, 88, 0.3);
+        }
+        .lang-separator {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.75rem;
+        }
+
+        /* Mobile list view height fix */
         .list-view-card-mobile {
-            min-height: 18rem; /* Increased minimum height for better mobile layout */
+            min-height: 18rem; 
+        }
+
+        /* Custom Select Styling */
+        .custom-select-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .custom-select {
+            appearance: none;
+            background-color: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 0.75rem 2.5rem 0.75rem 1rem;
+            border-radius: 1rem;
+            color: #003366;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .custom-select:hover {
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+        .custom-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 51, 102, 0.2);
+            border-color: #003366;
+        }
+        .select-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #003366;
+            font-size: 0.75rem;
         }
     </style>
 </head>
@@ -160,26 +211,23 @@
     <!-- GLOBAL BACKGROUND -->
     <div id="bg-container"></div>
 
-    <!-- Navigation (SCROLLABLE on mobile, NOT FIXED) -->
+    <!-- Navigation -->
     <nav class="w-full z-50 nav-glass top-0 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
-                <!-- Logo & VENUES text -->
+                <!-- Logo -->
                 <div class="flex items-center space-x-3 group cursor-pointer" onclick="window.scrollTo(0,0)">
                     <img src="NU_Logo_ENG-01.png" alt="Nazarbayev University" class="h-10 sm:h-12 w-auto object-contain transition-transform duration-500 group-hover:scale-105">
-                    <span class="font-sans font-light text-[10px] sm:text-sm ml-2 uppercase tracking-widest border-l border-gray-400 pl-2 block logo-text">VENUES</span> 
+                    <span class="font-sans font-light text-[10px] sm:text-sm ml-2 uppercase tracking-widest border-l border-gray-400 pl-2 block logo-text" data-i18n="logo_text">VENUES</span> 
                 </div>
                 
-                <div class="hidden md:block">
-                    <!-- NEW View Switch Buttons - Replaces Dropdown -->
-                    <div class="ml-10 flex items-baseline space-x-1">
-                        <button id="viewGridBtn" class="view-switch-btn p-3 rounded-xl hover:scale-105 transition-transform" onclick="setViewMode('grid')" aria-label="Grid View">
-                            <i class="fas fa-th-large"></i>
-                        </button>
-                        <button id="viewListBtn" class="view-switch-btn p-3 rounded-xl hover:scale-105 transition-transform" onclick="setViewMode('list')" aria-label="List View">
-                            <i class="fas fa-list"></i>
-                        </button>
-                    </div>
+                <!-- Language Switcher (Right aligned) -->
+                <div class="flex items-center bg-black/20 backdrop-blur-sm rounded-lg p-1 border border-white/10">
+                    <button class="lang-btn active" onclick="setLanguage('en')" data-lang="en">EN</button>
+                    <span class="lang-separator">|</span>
+                    <button class="lang-btn" onclick="setLanguage('ru')" data-lang="ru">RU</button>
+                    <span class="lang-separator">|</span>
+                    <button class="lang-btn" onclick="setLanguage('kk')" data-lang="kk">KZ</button>
                 </div>
             </div>
         </div>
@@ -188,15 +236,15 @@
     <!-- Hero Section -->
     <div class="relative pt-8 pb-16 sm:pt-16 sm:pb-32 overflow-hidden min-h-[40vh] sm:min-h-[50vh] flex items-center justify-center">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center" id="hero-content">
-            <h1 class="text-5xl sm:text-6xl md:text-8xl font-display text-white mb-4 sm:mb-6 tracking-tight opacity-0 translate-y-10 animate-fade-in-up drop-shadow-lg" style="animation-delay: 0.1s;">
+            <h1 class="text-5xl sm:text-6xl md:text-8xl font-display text-white mb-4 sm:mb-6 tracking-tight opacity-0 translate-y-10 animate-fade-in-up drop-shadow-lg" style="animation-delay: 0.1s;" data-i18n="hero_title">
                 World-Class Venues
             </h1>
-            <p class="mt-4 sm:mt-6 text-lg sm:text-xl md:text-2xl text-gray-200 max-w-2xl mx-auto font-light leading-relaxed opacity-0 translate-y-10 animate-fade-in-up drop-shadow-md px-4" style="animation-delay: 0.3s;">
+            <p class="mt-4 sm:mt-6 text-lg sm:text-xl md:text-2xl text-gray-200 max-w-2xl mx-auto font-light leading-relaxed opacity-0 translate-y-10 animate-fade-in-up drop-shadow-md px-4" style="animation-delay: 0.3s;" data-i18n="hero_subtitle">
                 Host your next conference, performance, or summit at <span class="font-medium text-nu-gold">Nazarbayev University</span>. 
             </p>
             <div class="mt-8 sm:mt-10 flex justify-center gap-4 opacity-0 translate-y-10 animate-fade-in-up" style="animation-delay: 0.5s;">
                 <a href="#halls" class="bg-white/10 backdrop-blur-md border border-white/20 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full font-medium hover:bg-white/20 transition duration-300 flex items-center gap-2 group font-sans tracking-wide shadow-lg hover:-translate-y-1 text-sm sm:text-base">
-                    Explore Spaces <i class="fas fa-arrow-down group-hover:translate-y-1 transition-transform"></i>
+                    <span data-i18n="explore_btn">Explore Spaces</span> <i class="fas fa-arrow-down group-hover:translate-y-1 transition-transform"></i>
                 </a>
             </div>
         </div>
@@ -205,30 +253,45 @@
     <!-- Interface Section -->
     <div id="halls" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         
-        <!-- Filters (STICKY) -->
-        <!-- Adjusted top value to stick closer to the edge -->
+        <!-- Filters (Redesigned with Dropdown & View Switch) -->
         <div class="sticky top-2 z-30 transition-all duration-300 pb-6 sm:pb-8" id="filter-bar">
-             <div class="apple-glass p-4 sm:p-6 rounded-3xl flex flex-col md:flex-row items-center md:justify-between gap-6">
+             <div class="apple-glass p-4 sm:p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6">
             
                 <!-- Capacity Slider (Left aligned) -->
                 <div class="w-full md:w-1/3 flex-shrink-0">
                     <label class="block text-sm font-semibold text-gray-700 mb-2 font-sans flex items-center justify-between">
-                        <span><i class="fas fa-users mr-2 text-nu-gold"></i>Minimum Capacity</span>
+                        <span><i class="fas fa-users mr-2 text-nu-gold"></i><span data-i18n="min_capacity">Minimum Capacity</span></span>
                         <span id="capacityValue" class="text-nu-blue font-bold bg-white/50 px-2 py-1 rounded-lg shadow-sm">0</span>
                     </label>
                     <input type="range" id="capacityRange" min="0" max="750" value="0" step="10" 
                         class="w-full h-1.5 bg-gray-300/50 rounded-lg appearance-none cursor-pointer accent-nu-blue hover:accent-nu-gold transition-colors">
                 </div>
 
-                <!-- Category Buttons (Aligned Right on MD+) -->
-                <div class="w-full md:w-auto overflow-x-auto hide-scrollbar">
-                    <div class="flex flex-nowrap items-center gap-2 md:justify-end" id="filterButtons">
-                        <button class="filter-btn active bg-nu-blue text-white px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 shadow-lg shadow-blue-900/20 transform scale-105 whitespace-nowrap flex-shrink-0" data-category="all">All</button>
-                        <button class="filter-btn bg-white/40 hover:bg-white text-gray-600 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-md border border-white/20 whitespace-nowrap flex-shrink-0" data-category="Hall">Halls</button>
-                        <button class="filter-btn bg-white/40 hover:bg-white text-gray-600 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-md border border-white/20 whitespace-nowrap flex-shrink-0" data-category="Classroom">Classrooms</button>
-                        <button class="filter-btn bg-white/40 hover:bg-white text-gray-600 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-md border border-white/20 whitespace-nowrap flex-shrink-0" data-category="Space">Spaces</button>
-                        <button class="filter-btn bg-white/40 hover:bg-white text-gray-600 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-md border border-white/20 whitespace-nowrap flex-shrink-0" data-category="Sports">Sports</button>
+                <!-- Right Side: Categories & View Switcher -->
+                <div class="w-full md:w-auto flex flex-row items-center justify-between md:justify-end gap-4">
+                    
+                    <!-- Category Dropdown -->
+                    <div class="custom-select-wrapper w-full md:w-auto">
+                        <select id="categorySelect" class="custom-select w-full md:w-48">
+                            <option value="all" data-i18n="cat_all">All</option>
+                            <option value="Hall" data-i18n="cat_halls">Halls</option>
+                            <option value="Classroom" data-i18n="cat_classrooms">Classrooms</option>
+                            <option value="Space" data-i18n="cat_spaces">Spaces</option>
+                            <option value="Sports" data-i18n="cat_sports">Sports</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-icon"></i>
                     </div>
+
+                    <!-- View Switcher (Moved here) -->
+                    <div class="flex items-baseline space-x-1 flex-shrink-0">
+                        <button id="viewGridBtn" class="view-switch-btn p-3 rounded-xl hover:scale-105 transition-transform" onclick="setViewMode('grid')" aria-label="Grid View">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button id="viewListBtn" class="view-switch-btn p-3 rounded-xl hover:scale-105 transition-transform" onclick="setViewMode('list')" aria-label="List View">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -243,7 +306,7 @@
             <div class="apple-glass inline-block p-8 rounded-full mb-4">
                 <i class="fas fa-search text-4xl text-nu-gold animate-pulse"></i>
             </div>
-            <h3 class="text-xl text-white font-display">No venues match your criteria.</h3>
+            <h3 class="text-xl text-white font-display" data-i18n="no_venues">No venues match your criteria.</h3>
         </div>
 
     </div>
@@ -260,7 +323,7 @@
                     <!-- Images injected here -->
                 </div>
                 
-                <!-- Combined Category and Location Badge Container (UPDATED HTML) -->
+                <!-- Combined Category and Location Badge Container -->
                 <div class="absolute top-4 left-4 sm:top-6 sm:left-6 z-10 flex flex-row gap-2">
                     <span id="modalCategory" class="px-3 py-1.5 bg-white/80 backdrop-blur-md text-nu-blue text-[10px] sm:text-xs font-bold rounded-full uppercase tracking-wide font-display shadow-lg border border-white/40"></span>
                     <span id="modalLocationBadge" class="px-3 py-1.5 bg-black/30 backdrop-blur-md text-white text-[10px] sm:text-xs font-semibold rounded-full tracking-wide shadow-lg border border-white/40 flex items-center gap-1">
@@ -297,25 +360,23 @@
                     </div>
                 </div>
                 
-                <!-- Removed Location block from here to save vertical space -->
-
                 <div class="mb-6 sm:mb-8">
-                    <h4 class="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 sm:mb-2">Details</h4>
+                    <h4 class="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 sm:mb-2" data-i18n="details_label">Details</h4>
                     <p id="modalDescription" class="text-gray-700 leading-relaxed font-light text-sm sm:text-base"></p>
                 </div>
 
                 <!-- Pricing Box -->
                 <div class="bg-gradient-to-br from-white/60 to-white/30 rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 border border-white/60 shadow-inner relative overflow-hidden group mt-auto">
                      <div class="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-nu-gold/10 rounded-full blur-2xl -mr-8 -mt-8 sm:-mr-10 sm:-mt-10"></div>
-                    <h4 class="text-nu-gold text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-3 sm:mb-4 font-display relative z-10">Rental Pricing <span class="text-gray-400 font-sans text-[8px] sm:text-[10px] normal-case ml-1">(inc. VAT)</span></h4>
+                    <h4 class="text-nu-gold text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-3 sm:mb-4 font-display relative z-10"><span data-i18n="rental_pricing">Rental Pricing</span> <span class="text-gray-400 font-sans text-[8px] sm:text-[10px] normal-case ml-1" data-i18n="vat_included">(inc. VAT)</span></h4>
                     
                     <div class="space-y-2 sm:space-y-3 relative z-10">
                         <div class="flex justify-between items-center pb-2 sm:pb-3 border-b border-gray-400/20 border-dashed">
-                            <span class="text-gray-600 text-xs sm:text-sm">Half Day (4h)</span>
+                            <span class="text-gray-600 text-xs sm:text-sm" data-i18n="half_day">Half Day (4h)</span>
                             <span id="modalPrice4h" class="text-nu-blue font-bold font-display text-base sm:text-lg"></span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-gray-600 text-xs sm:text-sm">Full Day (8h)</span>
+                            <span class="text-gray-600 text-xs sm:text-sm" data-i18n="full_day">Full Day (8h)</span>
                             <span id="modalPrice8h" class="text-nu-blue font-bold font-display text-base sm:text-lg"></span>
                         </div>
                     </div>
@@ -324,7 +385,7 @@
                 <!-- Request Booking Button -->
                 <div class="mt-4">
                     <button onclick="openContactModal()" class="w-full bg-nu-blue hover:bg-nu-blue/90 text-white font-bold py-3 sm:py-4 rounded-2xl transition-all duration-300 shadow-xl shadow-blue-900/10 hover:shadow-blue-900/20 hover:-translate-y-1 font-display tracking-wider flex justify-center items-center gap-2 group backdrop-blur-sm text-sm sm:text-base">
-                        Request Booking <i class="fas fa-paper-plane text-xs opacity-50 group-hover:translate-x-1 group-hover:opacity-100 transition-all"></i>
+                        <span data-i18n="request_booking">Request Booking</span> <i class="fas fa-paper-plane text-xs opacity-50 group-hover:translate-x-1 group-hover:opacity-100 transition-all"></i>
                     </button>
                 </div>
             </div>
@@ -342,8 +403,8 @@
                 <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-white to-white/50 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 text-nu-gold text-2xl sm:text-3xl shadow-lg border border-white/50">
                     <i class="fas fa-envelope-open-text"></i>
                 </div>
-                <h3 class="text-2xl sm:text-3xl font-display text-nu-blue mb-2 sm:mb-3 drop-shadow-sm">Contact Us</h3>
-                <p class="text-gray-600 mb-6 sm:mb-8 font-light leading-relaxed text-sm sm:text-base">Ready to host your event? <br>Reach out to our management team.</p>
+                <h3 class="text-2xl sm:text-3xl font-display text-nu-blue mb-2 sm:mb-3 drop-shadow-sm" data-i18n="contact_us">Contact Us</h3>
+                <p class="text-gray-600 mb-6 sm:mb-8 font-light leading-relaxed text-sm sm:text-base" data-i18n="contact_desc">Ready to host your event? <br>Reach out to our management team.</p>
                 
                 <div class="bg-white/50 p-4 sm:p-6 rounded-2xl mb-6 sm:mb-8 text-left border border-white/60 shadow-inner hover:shadow-md transition-shadow">
                     <a href="tel:87172706191" class="text-gray-800 mb-3 sm:mb-4 flex items-center group hover:text-nu-blue transition-colors">
@@ -360,7 +421,7 @@
                     </a>
                 </div>
 
-                <button onclick="closeContactModal()" class="text-gray-500 hover:text-gray-800 text-sm font-medium transition-colors hover:underline">Cancel</button>
+                <button onclick="closeContactModal()" class="text-gray-500 hover:text-gray-800 text-sm font-medium transition-colors hover:underline" data-i18n="cancel">Cancel</button>
             </div>
         </div>
     </div>
@@ -370,51 +431,370 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 text-center md:text-left">
                 <div>
-                    <span class="font-display font-bold text-xl sm:text-2xl tracking-wider text-nu-blue">NU <span class="text-nu-gold">VENUES</span></span>
-                    <p class="mt-4 sm:mt-6 text-gray-600 text-xs sm:text-sm leading-relaxed max-w-sm mx-auto md:mx-0">
+                    <span class="font-display font-bold text-xl sm:text-2xl tracking-wider text-nu-blue" data-i18n="footer_title">NU <span class="text-nu-gold">VENUES</span></span>
+                    <p class="mt-4 sm:mt-6 text-gray-600 text-xs sm:text-sm leading-relaxed max-w-sm mx-auto md:mx-0" data-i18n="footer_desc">
                         The premier destination for academic conferences, cultural performances, and corporate events in Astana.
                     </p>
                 </div>
                 <div class="flex flex-col md:items-end justify-center space-y-2">
-                    <h4 class="text-nu-blue font-bold mb-2 font-display uppercase tracking-widest text-xs sm:text-sm">Contact Information</h4>
-                    <p class="text-xs sm:text-sm text-gray-600 hover:text-nu-blue transition-colors cursor-pointer"><i class="fas fa-map-pin mr-2 text-nu-gold"></i> 53 Kabanbay Batyr Ave, Astana</p>
+                    <h4 class="text-nu-blue font-bold mb-2 font-display uppercase tracking-widest text-xs sm:text-sm" data-i18n="contact_info">Contact Information</h4>
+                    <p class="text-xs sm:text-sm text-gray-600 hover:text-nu-blue transition-colors cursor-pointer"><i class="fas fa-map-pin mr-2 text-nu-gold"></i> <span data-i18n="address">53 Kabanbay Batyr Ave, Astana</span></p>
                     <p class="text-xs sm:text-sm text-gray-600 hover:text-nu-blue transition-colors cursor-pointer"><i class="fas fa-envelope mr-2 text-nu-gold"></i> events@nu.edu.kz</p>
                 </div>
             </div>
             <div class="mt-12 sm:mt-16 pt-8 border-t border-gray-300/30 flex flex-col md:flex-row justify-between items-center text-[10px] sm:text-xs text-gray-500 gap-4">
-                <p>&copy; 2025 Nazarbayev University. All rights reserved.</p>
-                <!-- Removed Privacy and Terms links -->
+                <p data-i18n="copyright">&copy; 2025 Nazarbayev University. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Data Source
-        const halls = [
-            { id: 1, name: "Main Hall", category: "Hall", capacity: 720, size: "1319.00 m²", location: "Block C2", description: "IT support is included.", images: ["main_hall_1.png", "main_hall_2.png", "main_hall_3.png"], price4h: "3 000 000 ₸", price8h: "5 800 000 ₸" },
-            { id: 2, name: "Orange Hall", category: "Hall", capacity: 450, size: "585.13 m²", location: "Block C2", description: "IT support is included.", images: ["orange_hall_1.png", "orange_hall_1-1.png", "orange_hall_1-2.png"], price4h: "1 200 000 ₸", price8h: "2 400 000 ₸" },
-            { id: 3, name: "Cinema Hall", category: "Hall", capacity: 371, size: "536.80 m²", location: "Block D-7", description: "IT support is included.", images: ["cinema_hall_1.png", "cinema_hall_2.png", "cinema_hall_3.png"], price4h: "1 400 000 ₸", price8h: "2 700 000 ₸" },
-            { id: 4, name: "NUSOM Hall", category: "Hall", capacity: 320, size: "416.50 m²", location: "NUSOM", description: "IT support is included.", images: ["nusom_hall_1.png", "nusom_hall_3.png", "nusom_hall_3-1.png"], price4h: "900 000 ₸", price8h: "1 700 000 ₸" },
-            { id: 5, name: "Senate Hall", category: "Hall", capacity: 260, size: "754.60 m²", location: "Block 1", description: "IT support is included.", images: ["senate_hall_1.png", "senate_hall_2.png", "senate_hall_3.png"], price4h: "1 200 000 ₸", price8h: "2 200 000 ₸" },
-            { id: 6, name: "Ballroom (Left)", category: "Hall", capacity: 480, size: "557.77 m²", location: "Block C2", description: "IT support is included.", images: ["ballroom_left_1.png", "ballroom_left_2.png", "ballroom_left_3.png"], price4h: "1 100 000 ₸", price8h: "2 000 000 ₸" },
-            { id: 7, name: "Ballroom (Right)", category: "Hall", capacity: 480, size: "551.77 m²", location: "Block C2", description: "IT support is included.", images: ["ballroom_right_1.png", "ballroom_right_2.png", "ballroom_right_3.png"], price4h: "1 100 000 ₸", price8h: "2 000 000 ₸" },
-            { id: 8, name: "Red Hall", category: "Hall", capacity: 240, size: "270.58 m²", location: "Block C3", description: "IT support is included.", images: ["red_hall_1.png", "red_hall_2.png", "red_hall_3.png"], price4h: "700 000 ₸", price8h: "1 200 000 ₸" },
-            { id: 9, name: "Blue Hall", category: "Hall", capacity: 239, size: "282.55 m²", location: "Block C2", description: "IT support is included.", images: ["blue_hall_1.png", "blue_hall_2.png", "blue_hall_3.png"], price4h: "700 000 ₸", price8h: "1 400 000 ₸" },
-            { id: 10, name: "Green Hall", category: "Hall", capacity: 231, size: "277.53 m²", location: "Block C2", description: "IT support is included.", images: ["green_hall_1.png", "green_hall_2.png", "green_hall_3.png"], price4h: "700 000 ₸", price8h: "1 300 000 ₸" },
-            { id: 11, name: "Room 1010", category: "Classroom", capacity: 80, size: "169.54 m²", location: "Block C3", description: "IT support is included.", images: ["1010_1.png", "1010_2.png", "1010_3.png"], price4h: "300 000 ₸", price8h: "600 000 ₸" },
-            { id: 12, name: "Room 2001", category: "Classroom", capacity: 60, size: "133.00 m²", location: "Block C3", description: "IT support is included.", images: ["2001_1.png", "2001_2.png", "2001_3.png"], price4h: "300 000 ₸", price8h: "500 000 ₸" },
-            { id: 13, name: "Upper Atrium", category: "Space", capacity: 0, size: "2113.20 m²", location: "Block C2", description: "IT support is included.", images: ["upper_atrium_1.png", "upper_atrium_2.png", "upper_atrium_3.png"], price4h: "1 300 000 ₸", price8h: "2 500 000 ₸" },
-            { id: 14, name: "Swimming Pool (3 Lanes)", category: "Sports", capacity: 0, size: "N/A", location: "Athletic Center", description: "Professional grade swimming pool lanes for training or events.", images: ["swimming_pool_3lanes_1.png", "swimming_pool_3lanes_2.png", "swimming_pool_3lanes_3.png"], price4h: "900 000 ₸", price8h: "1 800 000 ₸" },
-            { id: 15, name: "Swimming Pool", category: "Sports", capacity: 0, size: "N/A", location: "Athletic Center", description: "Full Olympic-size swimming pool facility.", images: ["swimming_pool_1.png", "swimming_pool_2.png", "swimming_pool_3.png"], price4h: "-", price8h: "3 300 000 ₸" },
-            { id: 16, name: "Game Hall", category: "Sports", capacity: 0, size: "N/A", location: "Athletic Center", description: "Multipurpose indoor sports hall for various athletic activities.", images: ["game_hall_athletic_1.png", "game_hall_athletic_2.png", "game_hall_athletic_3.png"], price4h: "800 000 ₸", price8h: "1 600 000 ₸" },
-            { id: 17, name: "Block 7E Classroom", category: "Classroom", capacity: 51, size: "4196.44 m²", location: "Block 7E", description: "IT support is included.", images: ["7e_classroom_1.png", "7e_classroom_2.png", "7e_classroom_3.png"], price4h: "300 000 ₸", price8h: "500 000 ₸" },
-            { id: 18, name: "Game Hall", category: "Sports", capacity: 0, size: "N/A", location: "Sports Center", description: "Multipurpose indoor sports hall located in the Sports Center.", images: ["game_hall_sports_1.png", "game_hall_sports_2.png", "game_hall_sports_3.png"], price4h: "600 000 ₸", price8h: "1 100 000 ₸" }
+        // --- TRANSLATION DATA ---
+        const translations = {
+            en: {
+                logo_text: "VENUES",
+                hero_title: "World-Class Venues",
+                hero_subtitle_start: "Host your next conference, performance, or summit at ",
+                hero_subtitle_end: "Nazarbayev University",
+                explore_btn: "Explore Spaces",
+                min_capacity: "Minimum Capacity",
+                cat_all: "All",
+                cat_halls: "Halls",
+                cat_classrooms: "Classrooms",
+                cat_spaces: "Spaces",
+                cat_sports: "Sports",
+                no_venues: "No venues match your criteria.",
+                details_label: "Details",
+                rental_pricing: "Rental Pricing",
+                vat_included: "(inc. VAT)",
+                half_day: "Half Day (4h)",
+                full_day: "Full Day (8h)",
+                request_booking: "Request Booking",
+                contact_us: "Contact Us",
+                contact_desc: "Ready to host your event? <br>Reach out to our management team.",
+                cancel: "Cancel",
+                footer_title: "NU <span class='text-nu-gold'>VENUES</span>",
+                footer_desc: "The premier destination for academic conferences, cultural performances, and corporate events in Astana.",
+                contact_info: "Contact Information",
+                address: "53 Kabanbay Batyr Ave, Astana",
+                copyright: "&copy; 2025 Nazarbayev University. All rights reserved.",
+                starting_from_4h: "Starting From (4h)",
+                starting_from: "Starting From",
+                rental_8h: "8 Hour Rental",
+                flexible_capacity: "Flexible Capacity",
+                capacity_suffix: " Capacity"
+            },
+            ru: {
+                logo_text: "ПЛОЩАДКИ",
+                hero_title: "Площадки Мирового Класса",
+                hero_subtitle_start: "Проведите вашу следующую конференцию или мероприятие в ",
+                hero_subtitle_end: "Назарбаев Университете",
+                explore_btn: "Смотреть Площадки",
+                min_capacity: "Мин. Вместимость",
+                cat_all: "Все",
+                cat_halls: "Залы",
+                cat_classrooms: "Аудитории",
+                cat_spaces: "Пространства",
+                cat_sports: "Спорт",
+                no_venues: "Нет площадок, соответствующих критериям.",
+                details_label: "Детали",
+                rental_pricing: "Стоимость Аренды",
+                vat_included: "(вкл. НДС)",
+                half_day: "Полдня (4ч)",
+                full_day: "Полный день (8ч)",
+                request_booking: "Забронировать",
+                contact_us: "Связаться с нами",
+                contact_desc: "Готовы провести мероприятие? <br>Свяжитесь с нашей командой.",
+                cancel: "Отмена",
+                footer_title: "NU <span class='text-nu-gold'>ПЛОЩАДКИ</span>",
+                footer_desc: "Лучшее место для академических конференций, культурных мероприятий и корпоративных событий в Астане.",
+                contact_info: "Контактная Информация",
+                address: "пр. Кабанбай Батыра 53, Астана",
+                copyright: "&copy; 2025 Назарбаев Университет. Все права защищены.",
+                starting_from_4h: "Цена от (4ч)",
+                starting_from: "Цена от",
+                rental_8h: "Аренда на 8 часов",
+                flexible_capacity: "Гибкая Вместимость",
+                capacity_suffix: " Вместимость"
+            },
+            kk: {
+                logo_text: "ОРЫНДАР",
+                hero_title: "Әлемдік Деңгейдегі Орындар",
+                hero_subtitle_start: "Келесі конференцияңызды немесе іс-шараңызды ",
+                hero_subtitle_end: "Назарбаев Университетінде өткізіңіз",
+                explore_btn: "Орындарды Көру",
+                min_capacity: "Мин. Сыйымдылық",
+                cat_all: "Барлығы",
+                cat_halls: "Залдар",
+                cat_classrooms: "Аудиториялар",
+                cat_spaces: "Кеңістіктер",
+                cat_sports: "Спорт",
+                no_venues: "Талаптарға сай орындар табылмады.",
+                details_label: "Мәліметтер",
+                rental_pricing: "Жалға Алу Құны",
+                vat_included: "(ҚҚС қоса)",
+                half_day: "Жарты күн (4 сағ)",
+                full_day: "Толық күн (8 сағ)",
+                request_booking: "Тапсырыс беру",
+                contact_us: "Бізбен байланысу",
+                contact_desc: "Іс-шара өткізуге дайынсыз ба? <br>Біздің топпен хабарласыңыз.",
+                cancel: "Болдырмау",
+                footer_title: "NU <span class='text-nu-gold'>ОРЫНДАРЫ</span>",
+                footer_desc: "Астанадағы академиялық конференциялар, мәдени іс-шаралар және корпоративтік жиындарға арналған басты орын.",
+                contact_info: "Байланыс Ақпараты",
+                address: "Қабанбай батыр даңғылы 53, Астана",
+                copyright: "&copy; 2025 Назарбаев Университеті. Барлық құқықтар қорғалған.",
+                starting_from_4h: "Бастапқы баға (4 сағ)",
+                starting_from: "Бастапқы баға",
+                rental_8h: "8 Сағаттық Жалға Алу",
+                flexible_capacity: "Икемді Сыйымдылық",
+                capacity_suffix: " Сыйымдылық"
+            }
+        };
+
+        // --- HALL DATA WITH TRANSLATIONS ---
+        const hallsData = [
+            { 
+                id: 1, 
+                names: { en: "Main Hall", ru: "Главный Зал", kk: "Бас Зал" }, 
+                category: "Hall", capacity: 720, 
+                sizes: { en: "1319.00 m²", ru: "1319.00 м²", kk: "1319.00 м²" }, 
+                locations: { en: "Block C2", ru: "Блок C2", kk: "C2 Блогы" },
+                descriptions: { 
+                    en: "IT support is included.", 
+                    ru: "IT-поддержка включена.", 
+                    kk: "IT қолдауы қосылған." 
+                }, 
+                images: ["main_hall_1.png", "main_hall_2.png", "main_hall_3.png"], price4h: "3 000 000 ₸", price8h: "5 800 000 ₸" 
+            },
+            { 
+                id: 2, 
+                names: { en: "Orange Hall", ru: "Оранжевый Зал", kk: "Қызғылт Сары Зал" }, 
+                category: "Hall", capacity: 450, 
+                sizes: { en: "585.13 m²", ru: "585.13 м²", kk: "585.13 м²" }, 
+                locations: { en: "Block C2", ru: "Блок C2", kk: "C2 Блогы" },
+                descriptions: { 
+                    en: "IT support is included.", 
+                    ru: "IT-поддержка включена.", 
+                    kk: "IT қолдауы қосылған." 
+                }, 
+                images: ["orange_hall_1.png", "orange_hall_1-1.png", "orange_hall_1-2.png"], price4h: "1 200 000 ₸", price8h: "2 400 000 ₸" 
+            },
+            { 
+                id: 3, 
+                names: { en: "Cinema Hall", ru: "Кинозал", kk: "Кинозал" }, 
+                category: "Hall", capacity: 371, 
+                sizes: { en: "536.80 m²", ru: "536.80 м²", kk: "536.80 м²" }, 
+                locations: { en: "Block D-7", ru: "Блок D-7", kk: "D-7 Блогы" },
+                descriptions: { 
+                    en: "IT support is included.", 
+                    ru: "IT-поддержка включена.", 
+                    kk: "IT қолдауы қосылған." 
+                }, 
+                images: ["cinema_hall_1.png", "cinema_hall_2.png", "cinema_hall_3.png"], price4h: "1 400 000 ₸", price8h: "2 700 000 ₸" 
+            },
+            { 
+                id: 4, 
+                names: { en: "NUSOM Hall", ru: "Зал NUSOM", kk: "NUSOM Залы" }, 
+                category: "Hall", capacity: 320, 
+                sizes: { en: "416.50 m²", ru: "416.50 м²", kk: "416.50 м²" }, 
+                locations: { en: "NUSOM", ru: "NUSOM", kk: "NUSOM" },
+                descriptions: { 
+                    en: "IT support is included.", 
+                    ru: "IT-поддержка включена.", 
+                    kk: "IT қолдауы қосылған." 
+                }, 
+                images: ["nusom_hall_1.png", "nusom_hall_3.png", "nusom_hall_3-1.png"], price4h: "900 000 ₸", price8h: "1 700 000 ₸" 
+            },
+            { 
+                id: 5, 
+                names: { en: "Senate Hall", ru: "Сенат Зал", kk: "Сенат Залы" }, 
+                category: "Hall", capacity: 260, 
+                sizes: { en: "754.60 m²", ru: "754.60 м²", kk: "754.60 м²" }, 
+                locations: { en: "Block 1", ru: "Блок 1", kk: "1 Блогы" },
+                descriptions: { 
+                    en: "IT support is included.", 
+                    ru: "IT-поддержка включена.", 
+                    kk: "IT қолдауы қосылған." 
+                }, 
+                images: ["senate_hall_1.png", "senate_hall_2.png", "senate_hall_3.png"], price4h: "1 200 000 ₸", price8h: "2 200 000 ₸" 
+            },
+            { 
+                id: 6, 
+                names: { en: "Ballroom (Left)", ru: "Бальный Зал (Левый)", kk: "Бал Залы (Сол жақ)" }, 
+                category: "Hall", capacity: 480, 
+                sizes: { en: "557.77 m²", ru: "557.77 м²", kk: "557.77 м²" }, 
+                locations: { en: "Block C2", ru: "Блок C2", kk: "C2 Блогы" },
+                descriptions: { 
+                    en: "IT support is included.", 
+                    ru: "IT-поддержка включена.", 
+                    kk: "IT қолдауы қосылған." 
+                }, 
+                images: ["ballroom_left_1.png", "ballroom_left_2.png", "ballroom_left_3.png"], price4h: "1 100 000 ₸", price8h: "2 000 000 ₸" 
+            },
+            { 
+                id: 7, 
+                names: { en: "Ballroom (Right)", ru: "Бальный Зал (Правый)", kk: "Бал Залы (Оң жақ)" }, 
+                category: "Hall", capacity: 480, 
+                sizes: { en: "551.77 m²", ru: "551.77 м²", kk: "551.77 м²" }, 
+                locations: { en: "Block C2", ru: "Блок C2", kk: "C2 Блогы" },
+                descriptions: { 
+                    en: "IT support is included.", 
+                    ru: "IT-поддержка включена.", 
+                    kk: "IT қолдауы қосылған." 
+                }, 
+                images: ["ballroom_right_1.png", "ballroom_right_2.png", "ballroom_right_3.png"], price4h: "1 100 000 ₸", price8h: "2 000 000 ₸" 
+            },
+            { 
+                id: 8, 
+                names: { en: "Red Hall", ru: "Красный Зал", kk: "Қызыл Зал" }, 
+                category: "Hall", capacity: 240, 
+                sizes: { en: "270.58 m²", ru: "270.58 м²", kk: "270.58 м²" }, 
+                locations: { en: "Block C3", ru: "Блок C3", kk: "C3 Блогы" },
+                descriptions: { 
+                    en: "IT support is included.", 
+                    ru: "IT-поддержка включена.", 
+                    kk: "IT қолдауы қосылған." 
+                }, 
+                images: ["red_hall_1.png", "red_hall_2.png", "red_hall_3.png"], price4h: "700 000 ₸", price8h: "1 200 000 ₸" 
+            },
+            { 
+                id: 9, 
+                names: { en: "Blue Hall", ru: "Синий Зал", kk: "Көк Зал" }, 
+                category: "Hall", capacity: 239, 
+                sizes: { en: "282.55 m²", ru: "282.55 м²", kk: "282.55 м²" }, 
+                locations: { en: "Block C2", ru: "Блок C2", kk: "C2 Блогы" },
+                descriptions: { 
+                    en: "IT support is included.", 
+                    ru: "IT-поддержка включена.", 
+                    kk: "IT қолдауы қосылған." 
+                }, 
+                images: ["blue_hall_1.png", "blue_hall_2.png", "blue_hall_3.png"], price4h: "700 000 ₸", price8h: "1 400 000 ₸" 
+            },
+            { 
+                id: 10, 
+                names: { en: "Green Hall", ru: "Зеленый Зал", kk: "Жасыл Зал" }, 
+                category: "Hall", capacity: 231, 
+                sizes: { en: "277.53 m²", ru: "277.53 м²", kk: "277.53 м²" }, 
+                locations: { en: "Block C2", ru: "Блок C2", kk: "C2 Блогы" },
+                descriptions: { 
+                    en: "IT support is included.", 
+                    ru: "IT-поддержка включена.", 
+                    kk: "IT қолдауы қосылған." 
+                }, 
+                images: ["green_hall_1.png", "green_hall_2.png", "green_hall_3.png"], price4h: "700 000 ₸", price8h: "1 300 000 ₸" 
+            },
+            { 
+                id: 11, 
+                names: { en: "Room 1010", ru: "Кабинет 1010", kk: "Кабинет 1010" }, 
+                category: "Classroom", capacity: 80, 
+                sizes: { en: "169.54 m²", ru: "169.54 м²", kk: "169.54 м²" }, 
+                locations: { en: "Block C3", ru: "Блок C3", kk: "C3 Блогы" },
+                descriptions: { 
+                    en: "IT support is included.", 
+                    ru: "IT-поддержка включена.", 
+                    kk: "IT қолдауы қосылған." 
+                }, 
+                images: ["1010_1.png", "1010_2.png", "1010_3.png"], price4h: "300 000 ₸", price8h: "600 000 ₸" 
+            },
+            { 
+                id: 12, 
+                names: { en: "Room 2001", ru: "Кабинет 2001", kk: "Кабинет 2001" }, 
+                category: "Classroom", capacity: 60, 
+                sizes: { en: "133.00 m²", ru: "133.00 м²", kk: "133.00 м²" }, 
+                locations: { en: "Block C3", ru: "Блок C3", kk: "C3 Блогы" },
+                descriptions: { 
+                    en: "IT support is included.", 
+                    ru: "IT-поддержка включена.", 
+                    kk: "IT қолдауы қосылған." 
+                }, 
+                images: ["2001_1.png", "2001_2.png", "2001_3.png"], price4h: "300 000 ₸", price8h: "500 000 ₸" 
+            },
+            { 
+                id: 13, 
+                names: { en: "Upper Atrium", ru: "Верхний Атриум", kk: "Жоғарғы Атриум" }, 
+                category: "Space", capacity: 0, 
+                sizes: { en: "2113.20 m²", ru: "2113.20 м²", kk: "2113.20 м²" }, 
+                locations: { en: "Block C2", ru: "Блок C2", kk: "C2 Блогы" },
+                descriptions: { 
+                    en: "IT support is included.", 
+                    ru: "IT-поддержка включена.", 
+                    kk: "IT қолдауы қосылған." 
+                }, 
+                images: ["upper_atrium_1.png", "upper_atrium_2.png", "upper_atrium_3.png"], price4h: "1 300 000 ₸", price8h: "2 500 000 ₸" 
+            },
+            { 
+                id: 14, 
+                names: { en: "Swimming Pool (3 Lanes)", ru: "Бассейн (3 дорожки)", kk: "Бассейн (3 жолақ)" }, 
+                category: "Sports", capacity: 0, size: "N/A", 
+                sizes: { en: "N/A", ru: "Н/Д", kk: "Жоқ" },
+                locations: { en: "Athletic Center", ru: "Атлетик Центр", kk: "Атлетикалық Орталық" },
+                descriptions: { 
+                    en: "Professional grade swimming pool lanes for training or events.", 
+                    ru: "Профессиональные плавательные дорожки для тренировок или мероприятий.", 
+                    kk: "Жаттығулар мен іс-шараларға арналған кәсіби жүзу жолақтары." 
+                }, 
+                images: ["swimming_pool_3lanes_1.png", "swimming_pool_3lanes_2.png", "swimming_pool_3lanes_3.png"], price4h: "900 000 ₸", price8h: "1 800 000 ₸" 
+            },
+            { 
+                id: 15, 
+                names: { en: "Swimming Pool", ru: "Бассейн", kk: "Бассейн" }, 
+                category: "Sports", capacity: 0, size: "N/A", 
+                sizes: { en: "N/A", ru: "Н/Д", kk: "Жоқ" },
+                locations: { en: "Athletic Center", ru: "Атлетик Центр", kk: "Атлетикалық Орталық" },
+                descriptions: { 
+                    en: "Full Olympic-size swimming pool facility.", 
+                    ru: "Полный олимпийский бассейн.", 
+                    kk: "Олимпиадалық стандарттағы толық бассейн кешені." 
+                }, 
+                images: ["swimming_pool_1.png", "swimming_pool_2.png", "swimming_pool_3.png"], price4h: "-", price8h: "3 300 000 ₸" 
+            },
+            { 
+                id: 16, 
+                names: { en: "Game Hall", ru: "Игровой Зал", kk: "Ойын Залы" }, 
+                category: "Sports", capacity: 0, size: "N/A", 
+                sizes: { en: "N/A", ru: "Н/Д", kk: "Жоқ" },
+                locations: { en: "Athletic Center", ru: "Атлетик Центр", kk: "Атлетикалық Орталық" },
+                descriptions: { 
+                    en: "Multipurpose indoor sports hall for various athletic activities.", 
+                    ru: "Многофункциональный крытый спортивный зал для различных спортивных мероприятий.", 
+                    kk: "Әртүрлі спорттық іс-шараларға арналған көпфункционалды жабық спорт залы." 
+                }, 
+                images: ["game_hall_athletic_1.png", "game_hall_athletic_2.png", "game_hall_athletic_3.png"], price4h: "800 000 ₸", price8h: "1 600 000 ₸" 
+            },
+            { 
+                id: 17, 
+                names: { en: "Block 7E Classroom", ru: "Аудитория Блок 7E", kk: "7E Блогы Аудиториясы" }, 
+                category: "Classroom", capacity: 51, 
+                sizes: { en: "4196.44 m²", ru: "4196.44 м²", kk: "4196.44 м²" }, 
+                locations: { en: "Block 7E", ru: "Блок 7E", kk: "7E Блогы" },
+                descriptions: { 
+                    en: "IT support is included.", 
+                    ru: "IT-поддержка включена.", 
+                    kk: "IT қолдауы қосылған." 
+                }, 
+                images: ["7e_classroom_1.png", "7e_classroom_2.png", "7e_classroom_3.png"], price4h: "300 000 ₸", price8h: "500 000 ₸" 
+            },
+            { 
+                id: 18, 
+                names: { en: "Game Hall", ru: "Игровой Зал", kk: "Ойын Залы" }, 
+                category: "Sports", capacity: 0, size: "N/A", 
+                sizes: { en: "N/A", ru: "Н/Д", kk: "Жоқ" },
+                locations: { en: "Sports Center", ru: "Спортивный Центр", kk: "Спорт Орталығы" },
+                descriptions: { 
+                    en: "Multipurpose indoor sports hall located in the Sports Center.", 
+                    ru: "Многофункциональный крытый спортивный зал, расположенный в Спортивном Центре.", 
+                    kk: "Спорт орталығында орналасқан көпфункционалды жабық спорт залы." 
+                }, 
+                images: ["game_hall_sports_1.png", "game_hall_sports_2.png", "game_hall_sports_3.png"], price4h: "600 000 ₸", price8h: "1 100 000 ₸" 
+            }
         ];
 
         // State
         let currentCategory = 'all';
         let minCapacity = 0;
-        let viewMode = 'list'; // Start in list mode after the user's latest request
+        let viewMode = 'list';
+        let currentLang = 'en';
 
         // Intersection Observer for Scroll Animations
         const observerOptions = {
@@ -456,6 +836,41 @@
             renderHalls();
         }
 
+        // Language Switcher Logic
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // Update active state of language buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // Update static text elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                if (translations[lang][key]) {
+                    // Check for nested HTML (like in footer_title)
+                    if (el.innerHTML.includes('<') && !el.tagName.match(/OPTION|BUTTON/)) { 
+                         el.innerHTML = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+
+            // Update complex static text (Hero Subtitle)
+            const heroSubtitle = document.querySelector('[data-i18n="hero_subtitle"]');
+            if (heroSubtitle) {
+                heroSubtitle.innerHTML = `${translations[lang].hero_subtitle_start} <span class="font-medium text-nu-gold">${translations[lang].hero_subtitle_end}</span>.`;
+            }
+
+            // Re-render data-driven content
+            renderHalls();
+        }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -473,18 +888,10 @@
                 renderHalls();
             });
 
-            const filterBtns = document.querySelectorAll('.filter-btn');
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    filterBtns.forEach(b => {
-                        b.classList.remove('bg-nu-blue', 'text-white', 'shadow-lg', 'scale-105');
-                        b.classList.add('bg-white/40', 'text-gray-600');
-                    });
-                    btn.classList.remove('bg-white/40', 'text-gray-600');
-                    btn.classList.add('bg-nu-blue', 'text-white', 'shadow-lg', 'scale-105');
-                    currentCategory = btn.dataset.category;
-                    renderHalls();
-                });
+            const categorySelect = document.getElementById('categorySelect');
+            categorySelect.addEventListener('change', (e) => {
+                 currentCategory = e.target.value;
+                 renderHalls();
             });
 
              // Attaching click listeners to the new view switch buttons
@@ -495,6 +902,7 @@
         function renderHalls() {
             const grid = document.getElementById('hallsGrid');
             const emptyState = document.getElementById('emptyState');
+            const t = translations[currentLang];
             
             // Clear grid content immediately
             grid.innerHTML = '';
@@ -507,7 +915,7 @@
                 grid.classList.remove('grid-cols-1');
             }
             
-            const filtered = halls.filter(hall => {
+            const filtered = hallsData.filter(hall => {
                 const matchCat = currentCategory === 'all' || hall.category === currentCategory;
                 const matchCap = minCapacity === 0 ? true : hall.capacity >= minCapacity;
                 return matchCat && matchCap;
@@ -529,21 +937,26 @@
                 
                 const capacityText = hall.capacity > 0 ? `${hall.capacity}` : 'N/A';
                 
+                // Get localized strings
+                const name = hall.names[currentLang];
+                const location = hall.locations[currentLang];
+                const size = hall.sizes[currentLang];
+                
                 // Use APPLE-GLASS class
                 if (viewMode === 'list') {
-                    // UPDATED: Desktop List View: md:h-36 (lower height), md:w-64 (16:9 aspect for h-36 is approx w-64), enlarged detail text.
+                    // Desktop List View: md:h-36 (lower height), md:w-64 (16:9 aspect for h-36 is approx w-64), enlarged detail text.
                     cardWrapper.innerHTML = `
                         <div class="apple-glass rounded-2xl overflow-hidden flex flex-col md:flex-row h-auto list-view-card-mobile md:h-36 group cursor-pointer transition-all border border-white/60" onclick="openModal(${hall.id})">
                             <!-- Image container adjusted for compact size (w-64 h-full) -->
                             <div class="w-full md:w-64 h-48 md:h-full relative overflow-hidden flex-shrink-0">
-                                <img src="${hall.images[0]}" alt="${hall.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                <img src="${hall.images[0]}" alt="${name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                             </div>
                             <div class="p-4 md:p-6 flex-grow flex flex-col justify-center">
                                 <div class="flex justify-between items-start mb-1">
                                     <div class="flex-grow">
                                         <span class="text-[10px] font-bold px-2 py-0.5 bg-white/60 text-nu-blue rounded mb-1 inline-block uppercase tracking-wider border border-white/40 shadow-sm">${hall.category}</span>
                                         <!-- Venue Name - Kept at md:text-2xl -->
-                                        <h3 class="text-lg md:text-2xl font-display text-nu-blue group-hover:text-nu-gold transition duration-300 drop-shadow-sm pr-2 leading-tight">${hall.name}</h3>
+                                        <h3 class="text-lg md:text-2xl font-display text-nu-blue group-hover:text-nu-gold transition duration-300 drop-shadow-sm pr-2 leading-tight">${name}</h3>
                                     </div>
                                     <span class="w-8 h-8 rounded-full bg-white/60 flex items-center justify-center group-hover:bg-nu-blue group-hover:text-white transition-all duration-300 shrink-0 ml-2 border border-white/50 shadow-sm">
                                         <i class="fas fa-arrow-right text-gray-400 text-xs group-hover:text-white transform group-hover:translate-x-1 transition-transform"></i>
@@ -552,11 +965,11 @@
                                 <!-- Details - Increased text size to md:text-base on desktop -->
                                 <div class="flex flex-wrap items-center gap-3 mb-2 text-sm md:text-base text-gray-600 font-medium">
                                     <div class="flex items-center"><i class="fas fa-users text-nu-gold mr-1.5"></i> ${capacityText}</div>
-                                    <div class="flex items-center"><i class="fas fa-expand text-nu-gold mr-1.5"></i> ${hall.size}</div>
-                                    <div class="flex items-center"><i class="fas fa-map-marker-alt text-nu-gold mr-1.5"></i> ${hall.location}</div>
+                                    <div class="flex items-center"><i class="fas fa-expand text-nu-gold mr-1.5"></i> ${size}</div>
+                                    <div class="flex items-center"><i class="fas fa-map-marker-alt text-nu-gold mr-1.5"></i> ${location}</div>
                                 </div>
                                 <div class="flex flex-col mt-auto">
-                                    <span class="text-[9px] uppercase tracking-wide text-gray-500 font-bold">Starting From (4h)</span>
+                                    <span class="text-[9px] uppercase tracking-wide text-gray-500 font-bold">${t.starting_from_4h}</span>
                                     <!-- Price - Increased desktop size to md:text-2xl -->
                                     <div class="flex items-center text-nu-blue font-bold font-display text-base md:text-2xl leading-none">
                                         ${hall.price4h !== '-' ? hall.price4h : hall.price8h}
@@ -564,7 +977,7 @@
                                 </div>
                                 <!-- Mobile Price Visibility Fix for 8h (Hidden on desktop) -->
                                 <div class="md:hidden flex flex-col mt-2">
-                                    <span class="text-[9px] uppercase tracking-wide text-gray-500 font-bold">8 Hour Rental</span>
+                                    <span class="text-[9px] uppercase tracking-wide text-gray-500 font-bold">${t.rental_8h}</span>
                                     <div class="flex items-center text-nu-blue font-bold font-display text-sm">
                                         ${hall.price8h}
                                     </div>
@@ -573,34 +986,34 @@
                         </div>
                     `;
                 } else {
-                    // Grid View (No Changes)
+                    // Grid View
                     cardWrapper.innerHTML = `
                         <div class="apple-glass rounded-3xl overflow-hidden flex flex-col h-full group cursor-pointer transition-all border border-white/60" onclick="openModal(${hall.id})">
                             <div class="h-48 sm:h-56 md:h-60 overflow-hidden relative">
-                                <img src="${hall.images[0]}" alt="${hall.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                <img src="${hall.images[0]}" alt="${name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-60"></div>
                                 
                                 <!-- Location Badge on Image Bottom Right -->
                                 <div class="absolute bottom-3 right-3 bg-white/20 backdrop-blur-md px-2 py-1 rounded-lg border border-white/30 shadow-sm z-10 flex items-center">
                                      <i class="fas fa-map-marker-alt text-nu-gold text-xs mr-1"></i>
-                                     <span class="text-[10px] sm:text-xs font-semibold text-white tracking-wide">${hall.location}</span>
+                                     <span class="text-[10px] sm:text-xs font-semibold text-white tracking-wide">${location}</span>
                                 </div>
 
                                 <div class="absolute bottom-4 left-4 right-16 flex justify-between items-end">
                                     <div>
                                         <span class="text-[9px] sm:text-[10px] font-bold px-2 py-1 bg-white/90 backdrop-blur-md rounded text-nu-blue mb-2 inline-block uppercase tracking-wider shadow-sm">${hall.category}</span>
-                                        <h3 class="text-lg sm:text-xl font-display text-white group-hover:text-nu-gold transition-colors duration-300 shadow-black drop-shadow-md leading-tight">${hall.name}</h3>
+                                        <h3 class="text-lg sm:text-xl font-display text-white group-hover:text-nu-gold transition-colors duration-300 shadow-black drop-shadow-md leading-tight">${name}</h3>
                                     </div>
                                 </div>
                             </div>
                             <div class="p-5 sm:p-6 flex-grow flex flex-col">
                                 <div class="flex justify-between items-center mb-4 text-xs sm:text-sm text-gray-700 font-medium">
                                     <div class="flex items-center bg-white/40 px-2 sm:px-3 py-1.5 rounded-lg border border-white/40"><i class="fas fa-users text-nu-gold mr-2"></i> ${capacityText}</div>
-                                    <div class="flex items-center bg-white/40 px-2 sm:px-3 py-1.5 rounded-lg border border-white/40"><i class="fas fa-expand text-nu-gold mr-2"></i> ${hall.size}</div>
+                                    <div class="flex items-center bg-white/40 px-2 sm:px-3 py-1.5 rounded-lg border border-white/40"><i class="fas fa-expand text-nu-gold mr-2"></i> ${size}</div>
                                 </div>
                                 <div class="pt-4 border-t border-gray-400/20 flex justify-between items-center mt-auto">
                                     <div class="flex flex-col">
-                                        <span class="text-[9px] uppercase tracking-wide text-gray-500 font-bold">Starting From</span>
+                                        <span class="text-[9px] uppercase tracking-wide text-gray-500 font-bold">${t.starting_from}</span>
                                         <span class="text-nu-blue font-bold text-sm font-display">${hall.price4h !== '-' ? hall.price4h : hall.price8h}</span>
                                     </div>
                                     <span class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/60 flex items-center justify-center group-hover:bg-nu-blue group-hover:text-white transition-all duration-300 border border-white/50 shadow-sm">
@@ -625,21 +1038,30 @@
         const nextBtn = document.getElementById('nextBtn');
 
         function openModal(id) {
-            const hall = halls.find(h => h.id === id);
+            const hall = hallsData.find(h => h.id === id);
             if (!hall) return;
 
-            document.getElementById('modalTitle').textContent = hall.name;
+            const t = translations[currentLang];
+            const name = hall.names[currentLang];
+            const description = hall.descriptions[currentLang];
+            const location = hall.locations[currentLang];
+            const size = hall.sizes[currentLang];
+
+            document.getElementById('modalTitle').textContent = name;
             document.getElementById('modalCategory').textContent = hall.category;
-            document.getElementById('modalCapacity').textContent = hall.capacity > 0 ? `${hall.capacity} Capacity` : 'Flexible Capacity';
-            document.getElementById('modalSize').textContent = hall.size;
+            
+            const capacityStr = hall.capacity > 0 ? `${hall.capacity} ${t.capacity_suffix}` : t.flexible_capacity;
+            document.getElementById('modalCapacity').textContent = capacityStr;
+            
+            document.getElementById('modalSize').textContent = size;
             
             // Set the new location badge content
             const locationBadge = document.getElementById('modalLocationBadge');
-            locationBadge.textContent = hall.location;
+            locationBadge.textContent = location;
             locationBadge.insertAdjacentHTML('afterbegin', '<i class="fas fa-map-marker-alt text-nu-gold text-[8px] sm:text-[10px]"></i> ');
 
 
-            document.getElementById('modalDescription').textContent = hall.description;
+            document.getElementById('modalDescription').textContent = description;
             document.getElementById('modalPrice4h').textContent = hall.price4h;
             document.getElementById('modalPrice8h').textContent = hall.price8h;
 
